@@ -1,0 +1,95 @@
+import speech_recognition as sr
+from gtts import gTTS
+import playsound
+import os
+
+
+class SpeechRecognizer:
+
+    def __init__(self, lang='it-IT'):
+        self.lang = lang
+        self._recognizer = sr.Recognizer()
+        self._GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""INSERT THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
+        # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+        self._IBM_USERNAME = "INSERT IBM SPEECH TO TEXT USERNAME HERE"
+        # IBM Speech to Text passwords are mixed-case alphanumeric strings
+        self._IBM_PASSWORD = "INSERT IBM SPEECH TO TEXT PASSWORD HERE"
+
+    def get_audio(self):
+        with sr.Microphone() as mic:
+            print("Listening for audio")
+            return self._recognizer.listen(mic, timeout=5)
+
+    def recognize(self, audio):
+        result = None
+
+        # fallback to google speech recognition
+        try:
+            # for testing purposes, we're just using the default API key
+            # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+            # instead of `r.recognize_google(audio)`
+            result = self._recognizer.recognize_google(audio, language=self.lang)
+            print("Google Speech Recognition thinks you said ", result)
+            return result
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+        except sr.RequestError as ex:
+            print("Could not request results from Google Speech Recognition service", ex)
+
+        if result is not None:
+            return result
+        # fallback to google cloud
+        try:
+            result = self._recognizer.recognize_google_cloud(audio, language=self.lang,
+                                                             credentials_json=self._GOOGLE_CLOUD_SPEECH_CREDENTIALS)
+            print("Google Cloud Speech thinks you said ", result)
+        except sr.UnknownValueError:
+            print("Google Cloud Speech could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Google Cloud Speech service; {0}".format(e))
+
+        if result is not None:
+            return result
+        # recognize speech using IBM Speech to Text
+        try:
+            result = self._recognizer.recognize_ibm(audio, language=self.lang,
+                                                    username=self._IBM_USERNAME, password=self._IBM_PASSWORD)
+            print("IBM Speech to Text thinks you said " + result)
+        except sr.UnknownValueError:
+            print("IBM Speech to Text could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from IBM Speech to Text service; {0}".format(e))
+
+        if result is not None:
+            return result
+
+        try:
+            result = self._recognizer.recognize_sphinx(audio, language=self.lang)
+            print("Sphinx thinks you said ", result)
+        except sr.UnknownValueError:
+            print("Sphinx could not understand audio")
+        except sr.RequestError as ex:
+            print("Sphinx error", ex)
+
+        return result
+
+    def listen_and_recognize(self):
+        audio = self.get_audio()
+        print('acquired audio')
+        return self.recognize(audio)
+
+
+class TTS:
+    _TTS_FILE = 'temp_tts_out.mp3'
+
+    def __init__(self, lang='it'):
+        self.lang = lang
+        self.playingAudio = None
+
+    def say(self, text):
+        if self.playingAudio is not None and self.playingAudio.is_playing():
+            return
+        tts = gTTS(text=text, lang=self.lang)
+        tts.save(TTS._TTS_FILE)
+        playsound.playsound(TTS._TTS_FILE)
+        os.remove(TTS._TTS_FILE)
