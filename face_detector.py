@@ -10,12 +10,14 @@ import sys
 
 class FaceDetector:
 
-    def __init__(self, file_path, exit_char, waiting_interval, default_camera_device):
+    def __init__(self, file_path, exit_char, waiting_interval, default_camera_device, cam_res_width, cam_res_height):
         # (Private)
         self.__file_path = file_path
         self.__exit_char = exit_char
         self.__waiting_interval = waiting_interval
         self.__default_camera_device = default_camera_device
+        self.__cam_res_width = cam_res_width
+        self.__cam_res_height = cam_res_height
         self.__face_cascade_classifier = None
         self.__color = (255, 0, 0)
 
@@ -62,6 +64,8 @@ class FaceDetector:
 
         camera_device = self.__default_camera_device
         capture = cv.VideoCapture(camera_device)
+        capture.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+        capture.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
 
         logging.debug('Check image capturing...')
 
