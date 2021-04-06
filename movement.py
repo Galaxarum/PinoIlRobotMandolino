@@ -1,36 +1,58 @@
 from gpiozero import DistanceSensor, Robot, DigitalInputDevice
 from time import sleep
 
-sensorFront = DistanceSensor(echo="BOARD10", trigger="", threshold_distance=0.1)
-sensorBack = DistanceSensor(echo=18, trigger=17, threshold_distance=0.1)
-robot = Robot(left=(4, 14), right=(17, 18)) #A tuple of two (or three) GPIO pins representing the forward and backward inputs of the left and right motor’s controller
-line_sensor = DigitalInputDevice(9)
 
-while True:
+class Movement:
 
-    distanceFront = sensorFront.distance * 100
-    distanceBack = sensorBack.distance * 100
-    print("Distance front : %.1f" % distanceFront)
-    print("Distance back : %.1f" % distanceBack)
-    sleep(1)
+    def __init__(self):
+        self.__sensorFront = DistanceSensor(echo="BOARD10", trigger="", threshold_distance=0.1)
+        self.__sensorBack = DistanceSensor(echo=18, trigger=17, threshold_distance=0.1)
+        self.__robot = Robot(left=(4, 14), right=(17, 18))
+        self.__line_sensor = DigitalInputDevice(9)
+        self.__end_m = False
+        self.__end_o = False
 
-    if distanceFront <= 10:
-        robot.stop()
-        robot.backward(speed=0.5)
-        distanceFront.when_out_of_range = robot.stop()
+    def stop_robot(self):
+        self.__end_m = True
+        self.__end_o = True
+        self.__robot.stop()
 
-    if distanceBack <= 10:
-        robot.stop()
-        robot.forward(speed=0.5)
-        distanceBack.when_out_of_range = robot.stop()
+    def move_idle(self):
 
-    if line_sensor.is_active:
-        robot.forward(speed=0.5)
+        while not self.__end_m:
+            if self.__line_sensor.is_active:
+                self.__robot.forward(speed=0.5)
 
-    else:
-        robot.stop()
-        robot.backward(speed=0.5, curve_left=1)
-        line_sensor.wait_for_inactive()
-        robot.stop()
-        robot.forward(speed=0.5)
+            else:
+                self.__robot.stop()
+                self.__robot.backward(speed=0.5, curve_left=1)
+                self.__line_sensor.wait_for_inactive()
+                self.__robot.stop()
+                self.__robot.forward(speed=0.5)
+                self.__end_m = True
 
+    def check_obstacles(self):
+
+        while not self.__end_o:
+            distance_front = self.__sensorFront.distance * 100
+            distance_back = self.__sensorBack.distance * 100
+            print("Distance front : %.1f" % distance_front)
+            print("Distance back : %.1f" % distance_back)
+            sleep(1)
+
+            if distance_front <= 10:
+                self.__robot.stop()
+                self.__robot.backward(speed=0.5)
+                distance_front.when_out_of_range = self.__robot.stop()
+                self.__end_o = True
+
+            if distance_back <= 10:
+                self.__robot.stop()
+                self.__robot.forward(speed=0.5)
+                distance_back.when_out_of_range = self.__robot.stop()
+                self.__end_o = True
+
+movement = Movement
+movement.move_idle()
+movement.check_obstacles()
+movement.stop_robot()
