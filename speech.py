@@ -1,6 +1,8 @@
+import threading
+
 import speech_recognition as sr
 from gtts import gTTS
-import playsound
+import pygame
 import os
 
 
@@ -84,12 +86,17 @@ class TTS:
 
     def __init__(self, lang='it'):
         self.lang = lang
-        self.playingAudio = None
+        pygame.mixer.init()
 
-    def say(self, text):
-        if self.playingAudio is not None and self.playingAudio.is_playing():
-            return
+    def __say_blocking(self, text):
+        while pygame.mixer.music.get_busy():
+            continue
         tts = gTTS(text=text, lang=self.lang)
         tts.save(TTS._TTS_FILE)
-        playsound.playsound(TTS._TTS_FILE)
+        pygame.mixer.music.load(TTS._TTS_FILE)
+        pygame.mixer.music.play()
         os.remove(TTS._TTS_FILE)
+
+    def say(self, text):
+        threading.Thread(target=lambda: self.__say_blocking(text))
+

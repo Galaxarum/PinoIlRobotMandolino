@@ -9,6 +9,8 @@ FILE_PATH = {
 }
 EXIT_CHAR = 'e'
 WAITING_INTERVAL = 40 # milliseconds
+CAM_RES_WIDTH = 640
+CAM_RES_HEIGHT = 480
 DEFAULT_CAMERA_DEVICE = 0
 
 # --- FUNCTIONS ---
@@ -21,13 +23,15 @@ def print_init_info():
         print(') {0} -> {1}'.format(key, value))
     print('Exit Char:', EXIT_CHAR)
     print('Interval between captures (milliseconds):', WAITING_INTERVAL)
+    print('Cam width:', CAM_RES_WIDTH)
+    print('Cam height:', CAM_RES_HEIGHT)
     print('Default Camera Device:', DEFAULT_CAMERA_DEVICE)
     print('}')
 
 # --- MAIN ---
 
 if __name__ == '__main__':
-    face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE)
+    face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH, CAM_RES_HEIGHT)
 
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
