@@ -93,10 +93,20 @@ class TTS:
             continue
         tts = gTTS(text=text, lang=self.lang)
         tts.save(TTS.__TTS_FILE)
-        pygame.mixer.music.load(TTS.__TTS_FILE)
-        pygame.mixer.music.play()
+        self.__play_file_blocking(TTS.__TTS_FILE)
         os.remove(TTS.__TTS_FILE)
 
-    def say(self, text):
-        threading.Thread(target=lambda: self.__say_blocking(text))
+    @staticmethod
+    def __play_file_blocking(filename):
+        while pygame.mixer.music.get_busy():
+            continue
+        pygame.mixer.music.load(filename)
+        pygame.mixer.music.play()
 
+    def say(self, text):
+        def player():
+            if os.path.isfile(text):
+                self.__play_file_blocking(text)
+            else:
+                self.__say_blocking(text)
+        threading.Thread(target=player)
