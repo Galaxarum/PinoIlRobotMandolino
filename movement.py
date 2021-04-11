@@ -1,5 +1,4 @@
 from gpiozero import DistanceSensor, Robot, DigitalInputDevice
-from time import sleep
 import logging
 
 
@@ -10,7 +9,7 @@ class Movement:
         self.__sensorBack = DistanceSensor(echo=18, trigger=17, threshold_distance=0.1)
         self.__robot = Robot(left=(4, 14), right=(17, 18))
         self.__line_sensor = DigitalInputDevice(9)
-        self.__line_sensor.when_activated = self.__avoid_line
+        self.__line_sensor.when_deactivated = self.__avoid_line
         self.__sensorFront.threshold_distance = 10
         self.__sensorBack.threshold_distance = 10
         self.__sensorFront.when_activated = self.__obstacle_front
@@ -23,6 +22,7 @@ class Movement:
         logging.info('Starting line avoidance routine')
         self.__robot.stop()
         self.__robot.backward(speed=0.5, curve_left=1)
+        self.__line_sensor.wait_for_active()
         self.__line_sensor.wait_for_inactive()
         self.__robot.stop()
         self.__robot.forward(speed=0.5)
@@ -44,6 +44,3 @@ class Movement:
 
 
 movement = Movement
-movement.move_idle()
-movement.check_obstacles()
-movement.stop_robot()
