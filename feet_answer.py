@@ -1,26 +1,28 @@
 from gpiozero import DistanceSensor
-from time import sleep
 import pyttsx3
 
-engine = pyttsx3.init()
-sensorLeft = DistanceSensor(echo=21, trigger=20, threshold_distance=0.1)
-sensorRight = DistanceSensor(echo=18, trigger=17, threshold_distance=0.1)
-end = False
 
-while not end:
+class FeetAnswer:
 
-    distanceLeft = sensorLeft.distance * 100
-    distanceRight = sensorRight.distance * 100
-    print("Distance left : %.1f" % distanceLeft)
-    print("Distance right : %.1f" % distanceRight)
-    sleep(1)
+    def __init__(self):
+        self.engine = pyttsx3.init()
+        self.sensorLeft = DistanceSensor(echo=21, trigger=20, threshold_distance=0.1)
+        self.sensorRight = DistanceSensor(echo=18, trigger=17, threshold_distance=0.1)
+        self.end = False
+        self.sensorLeft.when_activated = self.__left_answer
+        self.sensorRight.when_activated = self.__right_answer
+        self.sensorLeft.when_deactivated = self.__end_routine
+        self.sensorRight.when_deactivated = self.__end_routine
 
-    if distanceLeft <= 10:
-        engine.say('Correct answer')
-        engine.runAndWait()
-        end = True
+    def __end_routine(self):
+        self.end = True
 
-    if distanceRight <= 10:
-        engine.say('Wrong answer')
-        engine.runAndWait()
-        end = True
+    def __left_answer(self):
+        if not self.end:
+            self.engine.say('Correct answer')
+            self.engine.runAndWait()
+
+    def __right_answer(self):
+        if not self.end:
+            self.engine.say('Wrong answer')
+            self.engine.runAndWait()
