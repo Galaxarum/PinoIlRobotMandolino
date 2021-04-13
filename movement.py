@@ -10,10 +10,8 @@ class Movement:
         self.__robot = Robot(left=(13, 19), right=(5, 6))
         self.__line_sensor = DigitalInputDevice(4)
         self.__line_sensor.when_deactivated = self.__avoid_line
-        self.__sensorFront.when_activated = self.__obstacle_front
-        self.__sensorBack.when_activated = self.__obstacle_back
-        self.__sensorFront.when_deactivated = self.__robot.stop
-        self.__sensorBack.when_deactivated = self.__robot.stop
+        self.__sensorFront.when_deactivated = self.__obstacle_front
+        self.__sensorBack.when_deactivated = self.__obstacle_back
         logging.info('Robot initialized')
 
     def __avoid_line(self):
@@ -28,16 +26,13 @@ class Movement:
 
     def __obstacle_front(self):
         logging.info('Avoiding obstacle on front')
-        self.__robot.stop()
         self.__robot.backward(speed=0.25)
 
     def __obstacle_back(self):
         logging.info('Avoiding obstacle on back')
-        self.__robot.stop()
         self.__robot.forward(speed=0.25)
 
     def move_idle(self):
-        self.__robot.stop()
         self.__robot.forward(speed=0.25)
 
 
