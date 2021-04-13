@@ -19,8 +19,10 @@ class FeetAnswer:
 
     def __left_answer(self):
         if not self.end:
-            self.game.receiveAnswer(True)
+            #self.game.receiveAnswer(True)
+            print("Correct answer")
 
     def __right_answer(self):
         if not self.end:
-            self.game.receiveAnswer(False)
+            #self.game.receiveAnswer(False)
+            print("Wrong answer")
