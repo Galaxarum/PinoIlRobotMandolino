@@ -7,7 +7,7 @@ class Movement:
     def __init__(self):
         self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
         self.__sensorBack = DistanceSensor(echo=2, trigger=3, threshold_distance=0.1)
-        self.__robot = Robot(left=(4, 14), right=(17, 18))
+        self.__robot = Robot(left=(13, 19), right=(5, 6))
         self.__line_sensor = DigitalInputDevice(4)
         self.__line_sensor.when_deactivated = self.__avoid_line
         self.__sensorFront.when_activated = self.__obstacle_front
