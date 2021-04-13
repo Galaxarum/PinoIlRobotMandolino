@@ -35,3 +35,21 @@ class FrontSensorTest(DistanceSensorTest):
 class BackSensorTest(DistanceSensorTest):
     def __init__(self):
         super().__init__(name='back sensor', echo=2, trigger=3)
+        
+
+class LeftSensorTest(DistanceSensorTest):
+    def __init__(self):
+        super().__init__(name='back sensor', echo=25, trigger=8)
+        
+        
+class RightSensorTest(DistanceSensorTest):
+    def __init__(self):
+        super().__init__(name='back sensor', echo=27, trigger=22)
+        
+        
+# This just checks if all the sensors can be instantiated propterly. Actual behaviour must be checked manually
+if __name__ == "__main__":
+    FrontSensorTest()
+    BackSensorTest()
+    LeftSensorTest()
+    RightSensorTest()
