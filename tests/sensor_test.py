@@ -6,8 +6,8 @@ class SensorTest:
     def __init__(self, name, sensor):
         self.__name = name
         self.__sensor = sensor
-        self.__sensor.on_activated = lambda: print(f'{name} activated (callback)')
-        self.__sensor.on_deactivated = lambda: print(f'{name} deactivated (callback)')
+        self.__sensor.when_activated = lambda: print(f'{name} activated (callback)')
+        self.__sensor.when_deactivated = lambda: print(f'{name} deactivated (callback)')
         self.__printer_thread = None
 
     def print_state(self, repeat_every=0):
