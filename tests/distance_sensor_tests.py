@@ -10,6 +10,7 @@ class DistanceSensorTest:
         self.__sensor.when_in_range = lambda: print(f'{name}: in range (callback)')
         self.__sensor.when_out_of_range = lambda: print(f'{name}: out of range (callback)')
         self.__printer_thread = None
+        print(f'{name}: testing initiated, callbacks active')
 
     def print_distance(self, repeat_every=0):
         print(f'{self.__name}: at distance {self.__sensor.distance*100}cm')
@@ -44,22 +45,22 @@ class DistanceSensorTest:
 
 class FrontSensorTest(DistanceSensorTest):
     def __init__(self):
-        super().__init__(name='front sensor', echo=23, trigger=24)
+        super().__init__(name='front_sensor', echo=23, trigger=24)
         
         
 class BackSensorTest(DistanceSensorTest):
     def __init__(self):
-        super().__init__(name='back sensor', echo=27, trigger=22)
+        super().__init__(name='back_sensor', echo=27, trigger=22)
         
 
 class LeftSensorTest(DistanceSensorTest):
     def __init__(self):
-        super().__init__(name='left sensor', echo=25, trigger=8)
+        super().__init__(name='left_sensor', echo=25, trigger=8)
         
         
 class RightSensorTest(DistanceSensorTest):
     def __init__(self):
-        super().__init__(name='right sensor', echo=10, trigger=9)
+        super().__init__(name='right_sensor', echo=10, trigger=9)
         
         
 # Checks if all the sensors can be instantiated properly end starts printing status changes

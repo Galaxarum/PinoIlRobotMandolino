@@ -5,11 +5,12 @@ from threading import Thread
 
 class LineSensorTest:
     def __init__(self):
-        self.__name = 'line sensor'
+        self.__name = 'line_sensor'
         self.__sensor = LineSensor(4, pull_up=True)
         self.__sensor.when_line = lambda: print(f'{self.__name}: line found (callback)')
         self.__sensor.when_no_line = lambda: print(f'{self.__name}: line removed (callback)')
         self.__printer_thread = None
+        print(f'{self.__name}: testing initiated, callbacks active')
 
     def print_state(self, repeat_every=0):
         print(f'{self.__name}: has value {self.__sensor.value}')

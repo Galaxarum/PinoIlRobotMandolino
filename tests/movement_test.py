@@ -10,8 +10,9 @@ class RobotTest:
     SPEED = 0.2
     
     def __init__(self):
-        self.__name = 'Robot'
+        self.__name = 'robot'
         self.__robot = Robot(left=(13, 19), right=(5, 6))
+        print(f'{self.__name}: testing initiated')
         
     def __check_input(self):
         regex = re.compile('y(es)?', re.IGNORECASE)
