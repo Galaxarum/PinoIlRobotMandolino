@@ -34,3 +34,8 @@ class LineSensorTest:
         print(f'Remove line from under {self.__name}')
         self.__sensor.wait_for_no_line()
         print(f'{self.__name}: line removed')
+
+
+# Instantiates the line sensor and starts logging status changes
+if __name__ == '__main__':
+    LineSensorTest()
