@@ -54,12 +54,12 @@ class BackSensorTest(DistanceSensorTest):
 
 class LeftSensorTest(DistanceSensorTest):
     def __init__(self):
-        super().__init__(name='back sensor', echo=25, trigger=8)
+        super().__init__(name='left sensor', echo=25, trigger=8)
         
         
 class RightSensorTest(DistanceSensorTest):
     def __init__(self):
-        super().__init__(name='back sensor', echo=10, trigger=9)
+        super().__init__(name='right sensor', echo=10, trigger=9)
         
         
 # Checks if all the sensors can be instantiated properly end starts printing status changes
