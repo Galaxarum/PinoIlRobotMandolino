@@ -30,7 +30,7 @@ class LineSensorTest:
         self.__sensor.wait_for_line()
         print(f'{self.__name}: line found')
 
-    def check_deactivation(self):
+    def check_no_line(self):
         print(f'Remove line from under {self.__name}')
         self.__sensor.wait_for_no_line()
         print(f'{self.__name}: line removed')
