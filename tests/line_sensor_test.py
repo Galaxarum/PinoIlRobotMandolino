@@ -18,10 +18,10 @@ class LineSensorTest:
                 while self.__printer_thread is not None:
                     sleep(repeat_every)
                     print(f'{self.__name} has value {self.__sensor.value}')
-
-            old = self.__printer_thread
-            self.__printer_thread = None
-            old.join()
+            if self.__printer_thread is not None:
+                old = self.__printer_thread
+                self.__printer_thread = None
+                old.join()
             self.__printer_thread = Thread(target=loop_print)
             self.__printer_thread.start()
 
