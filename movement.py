@@ -15,6 +15,8 @@ class Movement:
         self.__sensorBack.when_deactivated = self.__obstacle_back
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
+        self.__sensorFront.when_activated = lambda: self.move_idle(2)
+        self.__sensorBack.when_activated = lambda: self.move_idle(2)
         logging.info('Robot initialized')
 
     def __avoid_line(self):
@@ -23,8 +25,7 @@ class Movement:
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         self.__line_sensor.wait_for_active()
         self.__line_sensor.wait_for_inactive()
-        self.__robot.stop()
-        self.__robot.forward(speed=0.25)
+        self.move_idle()
         logging.info('Line avoidance finished')
 
     def __obstacle_front(self):
