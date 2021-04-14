@@ -12,12 +12,12 @@ class LineSensorTest:
         self.__printer_thread = None
 
     def print_state(self, repeat_every=0):
-        print(f'{self.__name} has value {self.__sensor.value}')
+        print(f'{self.__name}: has value {self.__sensor.value}')
         if repeat_every > 0:
             def loop_print():
                 while self.__printer_thread is not None:
                     sleep(repeat_every)
-                    print(f'{self.__name} has value {self.__sensor.value}')
+                    print(f'{self.__name}: has value {self.__sensor.value}')
             if self.__printer_thread is not None:
                 old = self.__printer_thread
                 self.__printer_thread = None
@@ -26,16 +26,15 @@ class LineSensorTest:
             self.__printer_thread.start()
 
     def check_line(self):
-        print(f'Put line under {self.__name}')
+        print(f'{self.__name}: put line above')
         self.__sensor.wait_for_line()
         print(f'{self.__name}: line found')
 
     def check_no_line(self):
-        print(f'Remove line from under {self.__name}')
+        print(f'{self.__name}: remove line from above')
         self.__sensor.wait_for_no_line()
         print(f'{self.__name}: line removed')
 
 
 # Instantiates the line sensor and starts logging status changes
-if __name__ == '__main__':
-    LineSensorTest()
+line_sensor = LineSensorTest()
