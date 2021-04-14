@@ -6,18 +6,18 @@ from threading import Thread
 class LineSensorTest:
     def __init__(self):
         self.__name = 'line sensor'
-        self.__sensor = LineSensor(4)
+        self.__sensor = LineSensor(4, sample_rate=20)
         self.__sensor.when_line = lambda: print(f'{self.__name}: line found (callback)')
         self.__sensor.when_no_line = lambda: print(f'{self.__name}: line removed (callback)')
         self.__printer_thread = None
 
     def print_state(self, repeat_every=0):
-        print(f'{self.__name} is {"active" if self.__sensor.is_active else "inactive"}')
+        print(f'{self.__name} has value {self.__sensor.value}')
         if repeat_every > 0:
             def loop_print():
                 while self.__printer_thread is not None:
                     sleep(repeat_every)
-                    print(f'{self.__name} is {"active" if self.__sensor.is_active else "inactive"}')
+                    print(f'{self.__name} has value {self.__sensor.value}')
 
             old = self.__printer_thread
             self.__printer_thread = None
