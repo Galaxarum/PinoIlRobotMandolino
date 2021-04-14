@@ -1,6 +1,7 @@
-from gpiozero import DistanceSensor, Robot, DigitalInputDevice
-from time import sleep
 import logging
+from time import sleep
+
+from gpiozero import DistanceSensor, Robot, LineSensor
 
 
 class Movement:
@@ -9,7 +10,7 @@ class Movement:
         self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
         self.__sensorBack = DistanceSensor(echo=2, trigger=3, threshold_distance=0.1)
         self.__robot = Robot(left=(13, 19), right=(5, 6))
-        self.__line_sensor = LineSensor(4)
+        self.__line_sensor = LineSensor(4, pull_up=True)
         self.__line_sensor.when_line = self.__avoid_line
         self.__sensorFront.when_deactivated = self.__obstacle_front
         self.__sensorBack.when_deactivated = self.__obstacle_back
