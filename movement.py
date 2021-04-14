@@ -26,11 +26,11 @@ class Movement:
 
     def __obstacle_front(self):
         logging.info('Avoiding obstacle on front')
-        self.__robot.backward(speed=0.25)
+        self.__robot.backward(speed=0.25, curve_left=0.5)
 
     def __obstacle_back(self):
         logging.info('Avoiding obstacle on back')
-        self.__robot.forward(speed=0.25)
+        self.__robot.forward(speed=0.25, curve_left=0.5)
 
     def move_idle(self):
         self.__robot.forward(speed=0.25)
