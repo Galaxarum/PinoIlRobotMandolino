@@ -27,9 +27,11 @@ class LineSensorTest:
             self.__printer_thread.start()
 
     def check_line(self):
+        self.__sensor.when_line = None
         print(f'{self.__name}: put line above')
         self.__sensor.wait_for_line()
         print(f'{self.__name}: line found')
+        self.__sensor.when_line = lambda: print(f'{self.__name}: line found (callback)')
 
     def check_no_line(self):
         print(f'{self.__name}: remove line from above')
