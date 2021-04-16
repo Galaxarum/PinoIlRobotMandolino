@@ -35,8 +35,8 @@ class Movement:
             print('waiting to find line on back')
 
         def on_line_again():
-            sleep(1)
             self.move_idle()
+            sleep(1)
             self.__line_sensor.when_line = None
             self.__line_sensor.when_no_line = on_leave_ending_line
             print('waiting to leave line on back')
