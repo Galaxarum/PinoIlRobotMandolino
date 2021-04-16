@@ -17,7 +17,7 @@ class Movement:
         self.__sensorBack.when_in_range = self.__obstacle_back
         self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
 
-        self.__line_sensor = LineSensor(4, queue_len=10, sample_rate=120)
+        self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
         # debug only, remove later
         #self.__line_sensor.when_no_line = lambda: print('line lost (callback)')
@@ -40,7 +40,7 @@ class Movement:
 
     def __avoid_line(self):
         print('Starting line avoidance routine')
-        #self.__line_sensor.when_line = lambda: print('line found (debug callback of avoid line method)')
+        self.__line_sensor.when_line = None # lambda: print('line found (debug callback of avoid line method)')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         print('waiting to lose line')
         self.__line_sensor.wait_for_no_line()
