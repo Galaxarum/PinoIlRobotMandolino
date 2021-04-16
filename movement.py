@@ -17,7 +17,7 @@ class Movement:
         self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
 
-        self.__robot = Robot(left=(13, 19), right=(5, 6))
+        self.__robot = Robot(left=(13, 26), right=(5, 6))
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
