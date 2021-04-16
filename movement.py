@@ -29,17 +29,20 @@ class Movement:
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
 
         def on_leave_triggering_line():
+            sleep(0.5)
             self.__line_sensor.when_line = on_line_again
             self.__line_sensor.when_no_line = None
             print('waiting to find line on back')
 
         def on_line_again():
+            sleep(0.5)
             self.move_idle()
             self.__line_sensor.when_line = None
             self.__line_sensor.when_no_line = on_leave_ending_line
             print('waiting to leave line on back')
 
         def on_leave_ending_line():
+            sleep(0.5)
             self.__line_sensor.when_line = self.__avoid_line
             self.__line_sensor.when_no_line = None
             print('Line avoidance finished')
