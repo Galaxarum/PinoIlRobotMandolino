@@ -6,7 +6,7 @@ from threading import Thread
 class LineSensorTest:
     def __init__(self):
         self.__name = 'line_sensor'
-        self.__sensor = LineSensor(4)
+        self.__sensor = LineSensor(4, queue_len=10)
         self.__sensor.when_line = lambda: print(f'{self.__name}: line found (callback)')
         self.__sensor.when_no_line = lambda: print(f'{self.__name}: line removed (callback)')
         self.__printer_thread = None
