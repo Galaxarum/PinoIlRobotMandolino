@@ -8,8 +8,6 @@ from threading import Thread
 
 class Movement:
 
-    #
-
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
         self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
         self.__sensorFront.when_in_range = self.__obstacle_front
@@ -65,3 +63,6 @@ class Movement:
     def move_idle(self, wait=0):
         sleep(wait)
         self.__robot.forward(speed=self.__standard_speed)
+
+    def stop(self):
+        self.__robot.stop()
