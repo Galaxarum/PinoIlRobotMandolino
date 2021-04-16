@@ -24,15 +24,6 @@ class Movement:
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
 
-        self.__active = True
-
-        def line_debug():
-            while self.__active:
-                sleep(0.3)
-                print(f'Line sensor has value: {self.__line_sensor.value}')
-
-        Thread(target=line_debug).start()
-
         print('Robot initialized')
 
     def __avoid_line(self):
@@ -60,5 +51,4 @@ class Movement:
         self.__robot.forward(speed=self.__standard_speed)
 
     def stop(self):
-        # self.__robot.stop()
-        self.__active = False
+        self.__robot.stop()
