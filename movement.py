@@ -17,7 +17,7 @@ class Movement:
         self.__sensorBack.when_in_range = self.__obstacle_back
         self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
 
-        self.__line_sensor = LineSensor(4)
+        self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
         # debug only, remove later
         self.__line_sensor.when_no_line = lambda: print('line lost (callback)')
