@@ -32,7 +32,7 @@ class Movement:
         def line_debug():
             while self.__active:
                 sleep(1)
-                print(self.__line_sensor.value)
+                print(self.__line_sensor.values)
 
         Thread(target=line_debug).start()
 
