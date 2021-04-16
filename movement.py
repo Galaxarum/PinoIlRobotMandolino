@@ -27,8 +27,10 @@ class Movement:
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
 
+        self.__active = True
+
         def line_debug():
-            while True:
+            while self.__active:
                 sleep(1)
                 print(self.__line_sensor.value)
 
@@ -66,3 +68,4 @@ class Movement:
 
     def stop(self):
         self.__robot.stop()
+        self.__active = False
