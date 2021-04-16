@@ -3,6 +3,8 @@ from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
 
+from threading import Thread
+
 
 class Movement:
 
@@ -26,6 +28,13 @@ class Movement:
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
+
+        def line_debug():
+            while True:
+                sleep(1)
+                print(self.__line_sensor.value)
+
+        Thread(target=line_debug).start()
 
         logging.info('Robot initialized')
 
