@@ -9,18 +9,16 @@ from threading import Thread
 class Movement:
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
-        self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
-        self.__sensorFront.when_in_range = self.__obstacle_front
-        self.__sensorFront.when_out_of_range = lambda: self.move_idle(2)
+        # self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
+        # self.__sensorFront.when_in_range = self.__obstacle_front
+        # self.__sensorFront.when_out_of_range = lambda: self.move_idle(2)
 
-        self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.1)
-        self.__sensorBack.when_in_range = self.__obstacle_back
-        self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
+        # self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.1)
+        # self.__sensorBack.when_in_range = self.__obstacle_back
+        # self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
 
         self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
-        # debug only, remove later
-        #self.__line_sensor.when_no_line = lambda: print('line lost (callback)')
 
         self.__robot = Robot(left=(13, 19), right=(5, 6))
 
