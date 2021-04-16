@@ -6,6 +6,8 @@ from gpiozero import DistanceSensor, Robot, LineSensor
 
 class Movement:
 
+    #
+
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
         self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
         self.__sensorFront.when_in_range = self.__obstacle_front
@@ -17,6 +19,8 @@ class Movement:
 
         self.__line_sensor = LineSensor(4, pull_up=True)
         self.__line_sensor.when_line = self.__avoid_line
+        # debug only, remove later
+        self.__line_sensor.when_no_line = lambda: print('line lost')
 
         self.__robot = Robot(left=(13, 19), right=(5, 6))
 
@@ -26,15 +30,22 @@ class Movement:
         logging.info('Robot initialized')
 
     def __avoid_line(self):
-        logging.info('Starting line avoidance routine')
-        self.__line_sensor.when_line = None
+        print('Starting line avoidance routine')
+        self.__line_sensor.when_line = lambda: print('line found (debug callback of avoid line method)')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
-        self.__line_sensor.wait_for_no_line()
+        sleep(3)
+        # print('waiting to lose line')
+        # self.__line_sensor.wait_for_no_line()
+        print('waiting to see line again')
         self.__line_sensor.wait_for_line()
+        print('resume movement')
         self.move_idle()
-        self.__line_sensor.wait_for_no_line()
+        sleep(3)
+        # print('waiting to leave line')
+        # self.__line_sensor.wait_for_no_line()
+        print('re-enabling line avoidance callback')
         self.__line_sensor.when_line = self.__avoid_line
-        logging.info('Line avoidance finished')
+        print('Line avoidance finished')
 
     def __obstacle_front(self):
         logging.info('Avoiding obstacle on front')
