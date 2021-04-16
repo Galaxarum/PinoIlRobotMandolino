@@ -25,6 +25,15 @@ class Movement:
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
 
+        self.__active = True
+
+        def line_debug():
+            while self.__active:
+                sleep(1)
+                print(self.__line_sensor.value)
+
+        Thread(target=line_debug).start()
+
         logging.info('Robot initialized')
 
     def __avoid_line(self):
@@ -36,9 +45,13 @@ class Movement:
         self.__line_sensor.when_line = line_found
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         print('waiting to lose line')
-        self.__line_sensor.wait_for_no_line()
+        while self.__line_sensor.value > 0.5:
+            pass
+        # self.__line_sensor.wait_for_no_line()
         print('waiting to see line again')
-        self.__line_sensor.wait_for_line()
+        while self.__line_sensor.value < 0.5:
+            pass
+        # self.__line_sensor.wait_for_line()
         print('resume movement')
         self.move_idle()
         print('waiting to leave line')
@@ -61,3 +74,4 @@ class Movement:
 
     def stop(self):
         self.__robot.stop()
+        self.__active = False
