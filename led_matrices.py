@@ -7,4 +7,4 @@ serial = spi(port=0, device=0, gpio=noop())
 device = max7219(serial, width=16, height=16)
 
 with canvas(device) as draw:
-    text(draw, (0, 0), 'Hello', fill='white')
+    draw.rectangle(device.bounding_box, outline="white", fill="black")
