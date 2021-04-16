@@ -38,27 +38,17 @@ class Movement:
 
     def __avoid_line(self):
         print('Starting line avoidance routine')
-        line = True
-        def line_found():
-            nonlocal line
-            line = True
-        self.__line_sensor.when_line = line_found
+        self.__line_sensor.when_line = None
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         print('waiting to lose line')
-        while self.__line_sensor.value > 0.5:
-            pass
-        # self.__line_sensor.wait_for_no_line()
+        self.__line_sensor.wait_for_no_line()
         sleep(1)
         print('waiting to see line again')
-        while self.__line_sensor.value < 0.5:
-            pass
-        # self.__line_sensor.wait_for_line()
+        self.__line_sensor.wait_for_line()
         print('resume movement')
         self.move_idle()
         print('waiting to leave line')
-        while self.__line_sensor.value > 0.5:
-            pass
-        # self.__line_sensor.wait_for_no_line()
+        self.__line_sensor.wait_for_no_line()
         print('re-enabling line avoidance callback')
         self.__line_sensor.when_line = self.__avoid_line
         print('Line avoidance finished')
