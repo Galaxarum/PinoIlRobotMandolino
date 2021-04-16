@@ -41,8 +41,7 @@ class Movement:
         self.__line_sensor.when_line = None
         #self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         print('waiting to lose line')
-        self.__line_sensor.wait_for_no_line(2)
-        sleep(1)
+        self.__line_sensor.wait_for_no_line()
         print('waiting to see line again')
         self.__line_sensor.wait_for_line()
         print('resume movement')

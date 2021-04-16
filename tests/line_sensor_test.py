@@ -38,6 +38,13 @@ class LineSensorTest:
         self.__sensor.wait_for_no_line()
         print(f'{self.__name}: line removed')
 
+    def alternate_lines(self):
+        while True:
+            print(f'{self.__name}: put line')
+            self.__sensor.wait_for_line()
+            print(f'{self.__name}: remove line')
+            self.__sensor.wait_for_no_line()
+
 
 # Instantiates the line sensor and starts logging status changes
 line_sensor = LineSensorTest()
