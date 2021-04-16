@@ -2,8 +2,6 @@ from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
 
-from threading import Thread
-
 
 class Movement:
 
@@ -30,12 +28,25 @@ class Movement:
         print('Starting line avoidance routine')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
 
+        def on_leave_triggering_line():
+            self.__line_sensor.when_line = on_line_again
+            self.__line_sensor.when_no_line = None
+            print('waiting to find line on back')
+
         def on_line_again():
             self.move_idle()
+            self.__line_sensor.when_line = None
+            self.__line_sensor.when_no_line = on_leave_ending_line
+            print('waiting to leave line on back')
+
+        def on_leave_ending_line():
             self.__line_sensor.when_line = self.__avoid_line
+            self.__line_sensor.when_no_line = None
             print('Line avoidance finished')
-        self.__line_sensor.when_line = on_line_again
-        print('waiting to get line again')
+
+        self.__line_sensor.when_line = None
+        self.__line_sensor.when_no_line = on_leave_triggering_line
+        print('waiting to leave triggering line')
 
     def __obstacle_front(self):
         print('Avoiding obstacle on front')
