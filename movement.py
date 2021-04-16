@@ -6,7 +6,7 @@ from gpiozero import DistanceSensor, Robot, LineSensor
 class Movement:
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
-        self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
+        self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.1)
         self.__sensorFront.when_in_range = self.__obstacle_front
         self.__sensorFront.when_out_of_range = lambda: self.move_idle(2)
 
