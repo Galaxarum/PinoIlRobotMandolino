@@ -48,6 +48,7 @@ class Movement:
         while self.__line_sensor.value > 0.5:
             pass
         # self.__line_sensor.wait_for_no_line()
+        sleep(1)
         print('waiting to see line again')
         while self.__line_sensor.value < 0.5:
             pass
