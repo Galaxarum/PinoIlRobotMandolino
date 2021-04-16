@@ -55,7 +55,9 @@ class Movement:
         print('resume movement')
         self.move_idle()
         print('waiting to leave line')
-        self.__line_sensor.wait_for_no_line()
+        while self.__line_sensor.value > 0.5:
+            pass
+        # self.__line_sensor.wait_for_no_line()
         print('re-enabling line avoidance callback')
         self.__line_sensor.when_line = self.__avoid_line
         print('Line avoidance finished')
