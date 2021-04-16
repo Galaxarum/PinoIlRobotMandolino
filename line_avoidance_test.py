@@ -5,3 +5,4 @@ if __name__ == '__main__':
     m.move_idle()
     input('Press any key to stop')
     m.stop()
+    del m
