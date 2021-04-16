@@ -17,7 +17,7 @@ class Movement:
         # self.__sensorBack.when_in_range = self.__obstacle_back
         # self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
 
-        self.__line_sensor = LineSensor(4)
+        self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
 
         self.__robot = Robot(left=(13, 19), right=(5, 6))
@@ -41,7 +41,7 @@ class Movement:
         self.__line_sensor.when_line = None
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         print('waiting to lose line')
-        self.__line_sensor.wait_for_no_line()
+        self.__line_sensor.wait_for_no_line(2)
         sleep(1)
         print('waiting to see line again')
         self.__line_sensor.wait_for_line()
