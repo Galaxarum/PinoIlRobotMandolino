@@ -20,7 +20,7 @@ class Movement:
         self.__line_sensor = LineSensor(4, queue_len=50)
         self.__line_sensor.when_line = self.__avoid_line
 
-        self.__robot = Robot(left=(13, 19), right=(5, 6))
+        #self.__robot = Robot(left=(13, 19), right=(5, 6))
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
@@ -39,7 +39,7 @@ class Movement:
     def __avoid_line(self):
         print('Starting line avoidance routine')
         self.__line_sensor.when_line = None
-        self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
+        #self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         print('waiting to lose line')
         self.__line_sensor.wait_for_no_line(2)
         sleep(1)
@@ -55,16 +55,16 @@ class Movement:
 
     def __obstacle_front(self):
         logging.info('Avoiding obstacle on front')
-        self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
+        #self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def __obstacle_back(self):
         logging.info('Avoiding obstacle on back')
-        self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
+        #self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def move_idle(self, wait=0):
         sleep(wait)
-        self.__robot.forward(speed=self.__standard_speed)
+        #self.__robot.forward(speed=self.__standard_speed)
 
     def stop(self):
         self.__robot.stop()
-        self.__active = False
+        #self.__active = False
