@@ -1,4 +1,3 @@
-import logging
 from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
@@ -17,7 +16,7 @@ class Movement:
         # self.__sensorBack.when_in_range = self.__obstacle_back
         # self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
 
-        self.__line_sensor = LineSensor(4, queue_len=50)
+        self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
 
         #self.__robot = Robot(left=(13, 19), right=(5, 6))
@@ -34,7 +33,7 @@ class Movement:
 
         Thread(target=line_debug).start()
 
-        logging.info('Robot initialized')
+        print('Robot initialized')
 
     def __avoid_line(self):
         print('Starting line avoidance routine')
@@ -53,11 +52,11 @@ class Movement:
         print('Line avoidance finished')
 
     def __obstacle_front(self):
-        logging.info('Avoiding obstacle on front')
+        print('Avoiding obstacle on front')
         #self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def __obstacle_back(self):
-        logging.info('Avoiding obstacle on back')
+        print('Avoiding obstacle on back')
         #self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def move_idle(self, wait=0):
@@ -65,5 +64,5 @@ class Movement:
         #self.__robot.forward(speed=self.__standard_speed)
 
     def stop(self):
-        self.__robot.stop()
-        #self.__active = False
+        # self.__robot.stop()
+        self.__active = False
