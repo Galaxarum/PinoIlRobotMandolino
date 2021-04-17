@@ -53,6 +53,9 @@ class FaceDetector:
         faces = self.__face_cascade_classifier.detectMultiScale(frame_gray_scale_equalized)
 
         if len(faces) > 0:
+            # Signal that a face has been recognized
+            self.__on_valid_face_present()
+
             biggest_face = faces[0]
 
             # Find the biggest face
@@ -72,7 +75,8 @@ class FaceDetector:
                                (biggest_face_width // 2, biggest_face_height // 2),
                                0, 0, 360, self.__color, 4)
 
-            # Find, basing on the face center, the portion of the frame in which the face is contained
+            # Find, basing on the face center, the portion of the frame in which the face is contained.
+            # If the position is different from the previous one, an event is thrown.
             if center[0] in range(0, self.__frame_width_block):
                 logging.debug('face left')
                 if self.__current_face_position != FaceDetectorEventListener.LEFT:
