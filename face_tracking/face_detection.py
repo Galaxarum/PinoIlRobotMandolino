@@ -1,4 +1,5 @@
 from face_detector import FaceDetector
+from face_detector_listener import FaceDetectorEventListener
 import logging
 import sys
 
@@ -15,6 +16,7 @@ DEFAULT_CAMERA_DEVICE = 0
 
 # --- FUNCTIONS ---
 
+
 def print_init_info():
     print('INITIALIZATION INFO')
     print('{')
@@ -28,15 +30,38 @@ def print_init_info():
     print('Default Camera Device:', DEFAULT_CAMERA_DEVICE)
     print('}')
 
+# TEST CLASS
+
+
+class Listener(FaceDetectorEventListener):
+
+    def __init__(self):
+        super().__init__()
+
+    def on_valid_face_present(self):
+        """
+        Override
+        """
+        print('Valid face present')
+
+    def on_face_position(self, position):
+        """
+        Override
+        """
+        print('Face position changed:', position)
+
+
 # --- MAIN ---
 
 if __name__ == '__main__':
+    test_listener = Listener()
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH, CAM_RES_HEIGHT)
 
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
     print_init_info()
 
+    face_detector.add_event_listener(test_listener)
     face_detector.start_detection()
 
     print('Terminated')

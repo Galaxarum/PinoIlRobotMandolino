@@ -4,6 +4,7 @@
 # ...in case OpenCV is installed with Anaconda3 in home dir: /home/<user>/anaconda3/share/opencv4/haarcascades
 
 from __future__ import print_function
+from face_detector_listener import FaceDetectorEventListener
 import cv2 as cv
 import logging
 import sys
@@ -18,8 +19,21 @@ class FaceDetector:
         self.__default_camera_device = default_camera_device
         self.__cam_res_width = cam_res_width
         self.__cam_res_height = cam_res_height
+
         self.__face_cascade_classifier = None
         self.__color = (255, 0, 0)
+        self.__event_listeners = []
+        self.__frame_division = 3  # ! WARNING: This value is hardcoded since the code is developed on that value.
+        self.__frame_width_block = cam_res_width // self.__frame_division
+        self.__current_face_position = FaceDetectorEventListener.CENTER
+
+    def __on_valid_face_present(self):
+        for event_listener in self.__event_listeners:
+            event_listener.on_valid_face_present()
+
+    def __on_face_position(self):
+        for event_listener in self.__event_listeners:
+            event_listener.on_face_position(self.__current_face_position)
 
     def __detect_face(self, frame):
         """
@@ -31,15 +45,49 @@ class FaceDetector:
         Return:
             The frame with faces bounds
         """
+        biggest_face = None
+
         frame_gray_scale = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         frame_gray_scale_equalized = cv.equalizeHist(frame_gray_scale)
 
         faces = self.__face_cascade_classifier.detectMultiScale(frame_gray_scale_equalized)
 
-        for (x, y, width, height) in faces:
-            center = (x + width // 2, y + height // 2)
+        if len(faces) > 0:
+            biggest_face = faces[0]
 
-            frame = cv.ellipse(frame, center, (width // 2, height // 2), 0, 0, 360, self.__color, 4)
+            # Find the biggest face
+            for (x, y, width, height) in faces:
+                if width > biggest_face[2] and height > biggest_face[3]:
+                    biggest_face = (x, y, width, height)
+
+            # Draw the biggest face over the frame
+            biggest_face_x = biggest_face[0]
+            biggest_face_y = biggest_face[1]
+            biggest_face_width = biggest_face[2]
+            biggest_face_height = biggest_face[3]
+
+            center = (biggest_face_x + biggest_face_width // 2, biggest_face_y + biggest_face_height // 2)
+
+            frame = cv.ellipse(frame, center,
+                               (biggest_face_width // 2, biggest_face_height // 2),
+                               0, 0, 360, self.__color, 4)
+
+            # Find, basing on the face center, the portion of the frame in which the face is contained
+            if center[0] in range(0, self.__frame_width_block):
+                logging.debug('face left')
+                if self.__current_face_position != FaceDetectorEventListener.LEFT:
+                    self.__current_face_position = FaceDetectorEventListener.LEFT
+                    self.__on_face_position()
+            elif center[0] in range(self.__frame_width_block, (2 * self.__frame_width_block)):
+                logging.debug('face center')
+                if self.__current_face_position != FaceDetectorEventListener.CENTER:
+                    self.__current_face_position = FaceDetectorEventListener.CENTER
+                    self.__on_face_position()
+            elif center[0] in range((2 * self.__frame_width_block), (3 * self.__frame_width_block)):
+                logging.debug('face right')
+                if self.__current_face_position != FaceDetectorEventListener.RIGHT:
+                    self.__current_face_position = FaceDetectorEventListener.RIGHT
+                    self.__on_face_position()
 
         return frame
 
@@ -88,3 +136,6 @@ class FaceDetector:
 
             if (cv.waitKey(self.__waiting_interval) == ord(self.__exit_char)):
                 break
+
+    def add_event_listener(self, event_listener):
+        self.__event_listeners.append(event_listener)
