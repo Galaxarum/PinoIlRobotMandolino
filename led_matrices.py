@@ -7,6 +7,7 @@ from luma.core.legacy import text
 class EyeLedMatrix(max7219):
     def preprocess(self, image):
         super(EyeLedMatrix, self).preprocess(image)
+        image.transpose(Image.FLIP_LEFT_RIGHT)
         upper = image.crop((0, 0, image.width-1, image.height/2))  # TODO: get upper half
         upper = upper.transpose(Image.FLIP_TOP_BOTTOM)
         image.paste(upper)
