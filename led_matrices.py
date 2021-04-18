@@ -29,21 +29,21 @@ class LedMatrices:
         text(draw, (2, 2), 'Pino', fill='white')
 
     def __eye_neutral_drawer(self, draw):
-        draw.arc(self.device.bounding_box, 0, 360, fill='black')
-        draw.ellipse([(6, 6), (9, 9)], outline='black', fill='black')
+        draw.arc(self.device.bounding_box, 0, 360, fill='white')
+        draw.ellipse([(6, 6), (9, 9)], outline='white', fill='white')
 
     def __eye_angry_drawer(self, draw, angle):
         self.__eye_neutral_drawer(draw)
-        draw.pieslice([(0, 0), (15, 15)], 180+angle, -angle, fill='black')
+        draw.pieslice([(0, 0), (15, 15)], 180+angle, -angle, fill='white')
 
     def __eye_flat_drawer(self, draw, angle):
         self.__eye_neutral_drawer(draw)
-        draw.chord([(0, 0), (15, 15)], 180 + angle, -angle, outline='black', fill='black')
+        draw.chord([(0, 0), (15, 15)], 180 + angle, -angle, outline='white', fill='white')
 
     def __eye_sad_drawer(self, draw, angle):
         self.__eye_neutral_drawer(draw)
-        draw.chord([(0, 0), (15, 15)], 180, -angle, fill='black')
-        draw.chord([(0, 0), (15, 15)], 180 + angle, 360, fill='black')
+        draw.chord([(0, 0), (15, 15)], 180, -angle, fill='white')
+        draw.chord([(0, 0), (15, 15)], 180 + angle, 360, fill='white')
 
     def eye_debug(self):
         self.__draw(self.__eye_debug_drawer)
