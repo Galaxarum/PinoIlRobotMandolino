@@ -5,8 +5,8 @@ class FeetAnswer:
 
     def __init__(self, game):
         self.__game = game
-        self.__sensorLeft = DistanceSensor(echo=18, trigger=23, threshold_distance=0.1)
-        self.__sensorRight = DistanceSensor(echo=10, trigger=9, threshold_distance=0.1)
+        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.1)
+        self.__sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.1)
         self.__disabled = True
         self.__sensorLeft.when_in_range = self.__left_answer
         self.__sensorRight.when_in_range = self.__right_answer
