@@ -20,7 +20,7 @@ class EyeLedMatrix(max7219):
 class LedMatrices:
     def __init__(self):
         serial0 = spi(port=0, device=0, gpio=noop())
-        serial1 = spi(port=1, device=1, gpio=noop())
+        serial1 = spi(port=1, device=0, gpio=noop())
         self.eyes = EyeLedMatrix(serial0, width=16, height=16)
         self.mouth = max7219(serial1)
         self.stop_speak()
