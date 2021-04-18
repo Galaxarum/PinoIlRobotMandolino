@@ -26,12 +26,15 @@ class LedMatrices:
         self.stop_speak()
 
     def speak(self):
-        pass
+        with canvas(self.mouth) as draw:
+            draw.line([(0, 5), (4, 2)], fill='white', width=1)
+            draw.line([(5, 2), (8, 5)], fill='white', width=1)
+
 
     def stop_speak(self):
         with canvas(self.mouth) as draw:
             y = self.mouth.bounding_box[3]/2
-            draw.line([(0, y), (self.mouth.bounding_box[2], y)], fill='white',width=2)
+            draw.line([(0, y), (self.mouth.bounding_box[2], y)], fill='white',width=1)
 
     def __draw(self, drawing_function):
         with canvas(self.eyes) as draw:
