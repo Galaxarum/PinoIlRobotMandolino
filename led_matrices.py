@@ -19,19 +19,30 @@ class EyeLedMatrix(max7219):
 
 class LedMatrices:
     def __init__(self):
-        serial = spi(port=0, device=0, gpio=noop())
-        self.device = EyeLedMatrix(serial, width=16, height=16)
+        serial0 = spi(port=0, device=0, gpio=noop())
+        serial1 = spi(port=1, device=1, gpio=noop())
+        self.eyes = EyeLedMatrix(serial0, width=16, height=16)
+        self.mouth = max7219(serial1)
+        self.stop_speak()
+
+    def speak(self):
+        pass
+
+    def stop_speak(self):
+        with canvas(self.mouth) as draw:
+            y = self.mouth.bounding_box[4]/2
+            draw.line(0, y, self.mouth.bounding_box[3], y)
 
     def __draw(self, drawing_function):
-        with canvas(self.device) as draw:
+        with canvas(self.eyes) as draw:
             drawing_function(draw)
 
     def __eye_debug_drawer(self, draw):
-        draw.rectangle(self.device.bounding_box, outline="white", fill="black")
+        draw.rectangle(self.eyes.bounding_box, outline="white", fill="black")
         text(draw, (2, 2), 'Pino', fill='white')
 
     def __eye_neutral_drawer(self, draw):
-        draw.arc(self.device.bounding_box, 0, 360, fill='white')
+        draw.arc(self.eyes.bounding_box, 0, 360, fill='white')
         draw.ellipse([(6, 6), (9, 9)], outline='white', fill='white')
 
     def __eye_angry_drawer(self, draw, angle):
@@ -60,8 +71,7 @@ class LedMatrices:
         sleep(1)
         self.eye_angry()
         sleep(1)
-        self.device.clear()
-        self.device.cleanup()
+        self.eyes.clear()
 
     def eye_neutral(self):
         self.__draw(self.__eye_neutral_drawer)
@@ -77,5 +87,3 @@ class LedMatrices:
 
     def eye_sad(self, angle=45):
         self.__draw(lambda draw: self.__eye_sad_drawer(draw, angle=angle))
-
-
