@@ -1,3 +1,5 @@
+from time import sleep
+
 from PIL import Image
 from luma.core.interface.serial import spi, noop
 from luma.core.render import canvas
@@ -47,6 +49,19 @@ class LedMatrices:
 
     def eye_debug(self):
         self.__draw(self.__eye_debug_drawer)
+        sleep(1)
+        self.eye_neutral()
+        sleep(1)
+        self.eye_suspicious()
+        sleep(1)
+        self.eye_bored()
+        sleep(1)
+        self.eye_sad()
+        sleep(1)
+        self.eye_angry()
+        sleep(1)
+        self.device.clear()
+        self.device.cleanup()
 
     def eye_neutral(self):
         self.__draw(self.__eye_neutral_drawer)
