@@ -120,4 +120,4 @@ class TTS:
                 self.__play_file_blocking(text)
             else:
                 self.__say_blocking(text)
-        Thread(target=player)
+        Thread(target=player, name='Audio Player')

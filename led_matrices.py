@@ -54,7 +54,7 @@ class LedMatrices:
                 for offset in range(self.mouth.width // 2):
                     self.mouth.set_position((offset, 0))
                     sleep(0.1)
-        Thread(target=scroll_mouth).start()
+        Thread(target=scroll_mouth, name='Mouth scroller').start()
 
         self.eye_neutral()
         self.stop_speak()
