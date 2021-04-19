@@ -27,6 +27,7 @@ class Movement(FaceDetectorEventListener):
         atexit.register(lambda: self.__robot.close())
         atexit.register(lambda: self.__sensorBack.close())
         atexit.register(lambda: self.__sensorFront.close())
+        atexit.register(lambda: self.__line_sensor.close())
 
         print('Robot initialized')
 
