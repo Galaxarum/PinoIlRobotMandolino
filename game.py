@@ -11,10 +11,7 @@ class Game:
     NO_GAME_TIMEOUT = 10  # s
     REPEAT_ANSWER_TIMEOUT = 20  # s
 
-    def __init__(self, sensor_left, sensor_right, time_before_exit):
-        self.__sensor_right = sensor_right
-        self.__sensor_left = sensor_left
-        self.__time_before_exit = time_before_exit
+    def __init__(self):
         self.__speech_object = TTS()
         self.__speech_recognizer = SpeechRecognizer()
         self.__emotion_controller = LedMatrices()
