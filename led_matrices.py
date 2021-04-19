@@ -35,7 +35,7 @@ def _plot_sin(draw, size, amplitude=None, steps=None):
             y += size[1] / 2
             point = (i + r * steps, y)
             draw.point(point, fill='white')
-            draw.line([prev, point])
+            draw.line([prev, point], fill='white', width=1)
             prev = point
 
 
@@ -50,7 +50,7 @@ class LedMatrices:
 
         def scroll_mouth():
             while self.mouth is not None:
-                for offset in range(self.mouth.width):
+                for offset in range(self.mouth.width // 2):
                     self.mouth.set_position((offset, 0))
                     sleep(0.1)
         Thread(target=scroll_mouth).start()
