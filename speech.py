@@ -107,13 +107,16 @@ class TTS:
         if self.__mouth_controller is not None:
             self.__mouth_controller.stop_speak()
 
-    def say(self, text):
+    def say(self, text, blocking=False):
         def player():
             if os.path.isfile(text):
                 self.__play_file_blocking(text)
             else:
                 self.__say_blocking(text)
-        Thread(target=player, name='Audio Player').start()
+        if blocking:
+            player()
+        else:
+            Thread(target=player, name='Audio Player').start()
 
 
 if __name__ == '__main__':
