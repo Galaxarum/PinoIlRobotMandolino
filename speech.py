@@ -1,9 +1,9 @@
-import threading
+import os
+from threading import Thread
 
+import pygame
 import speech_recognition as sr
 from gtts import gTTS
-import pygame
-import os
 
 
 class SpeechRecognizer:
@@ -75,33 +75,44 @@ class SpeechRecognizer:
 
         return result
 
-    def listen_and_recognize(self):
-        audio = self.get_audio()
-        print('acquired audio')
-        return self.recognize(audio)
+    def listen_and_recognize(self, game):
+        def underlying_function():
+            audio = self.get_audio()
+            print('acquired audio')
+            answer = self.recognize(audio)
+            game.receive_answer(answer)
+
+        Thread(target=underlying_function).start()
 
 
 class TTS:
     __TTS_FILE = 'temp_tts_out.mp3'
 
-    def __init__(self, lang='it'):
+    def __init__(self, lang='it', mouth_controller=None):
         self.lang = lang
+        self.__mouth_controller = mouth_controller
+        self.__busy_observer = None
         pygame.mixer.init()
 
-    def __say_blocking(self, text):
+    def __observe_speaking(self):
         while pygame.mixer.music.get_busy():
-            continue
+            pass
+        self.__mouth_controller.stop_speak()
+
+    def __say_blocking(self, text):
         tts = gTTS(text=text, lang=self.lang)
         tts.save(TTS.__TTS_FILE)
         self.__play_file_blocking(TTS.__TTS_FILE)
         os.remove(TTS.__TTS_FILE)
 
-    @staticmethod
-    def __play_file_blocking(filename):
+    def __play_file_blocking(self, filename):
         while pygame.mixer.music.get_busy():
-            continue
+            pass
         pygame.mixer.music.load(filename)
         pygame.mixer.music.play()
+        self.__mouth_controller.speak()
+        mouth_updater = Thread(target=self.__busy_observer)
+        mouth_updater.start()
 
     def say(self, text):
         def player():
@@ -109,4 +120,4 @@ class TTS:
                 self.__play_file_blocking(text)
             else:
                 self.__say_blocking(text)
-        threading.Thread(target=player)
+        Thread(target=player)
