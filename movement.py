@@ -1,9 +1,10 @@
 from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
+from face_tracking.face_detector_listener import FaceDetectorEventListener
 
 
-class Movement:
+class Movement(FaceDetectorEventListener):
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
         self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
@@ -58,6 +59,22 @@ class Movement:
     def __obstacle_back(self):
         print('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
+
+    def on_valid_face_present(self, present):
+        if present:
+            pass
+        else:
+            self.move_idle()
+
+    def on_face_position(self, position):
+        if position == FaceDetectorEventListener.CENTER:
+            self.__robot.forward(self.__standard_speed)
+        elif position == FaceDetectorEventListener.LEFT:
+            self.__robot.left(self.__standard_speed)
+        elif position == FaceDetectorEventListener.RIGHT:
+            self.__robot.right(self.__standard_speed)
+        else:
+            raise ValueError(f'Unexpected face position: {position}')
 
     def move_idle(self, wait=0):
         print('Moving')

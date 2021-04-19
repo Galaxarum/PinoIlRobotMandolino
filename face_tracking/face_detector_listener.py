@@ -3,9 +3,6 @@ class FaceDetectorEventListener:
     RIGHT = 'right'
     LEFT = 'left'
 
-    def __init__(self):
-        pass
-
     def on_valid_face_present(self, present):
         """
         Called when a face is being detected for a certain amount of time.
