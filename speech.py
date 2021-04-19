@@ -1,9 +1,9 @@
 import os
 from threading import Thread
 
-import pygame
 import speech_recognition as sr
 from gtts import gTTS
+from playsound import playsound
 
 
 class SpeechRecognizer:
@@ -19,6 +19,7 @@ class SpeechRecognizer:
 
     def get_audio(self):
         with sr.Microphone() as mic:
+            self.__recognizer.adjust_for_ambient_noise(mic)
             print("Listening for audio")
             return self.__recognizer.listen(mic, timeout=5)
 
@@ -86,18 +87,12 @@ class SpeechRecognizer:
 
 
 class TTS:
-    __TTS_FILE = 'temp_tts_out.mp3'
+    __TTS_FILE = 'temp_tts_out.ogg'
 
     def __init__(self, lang='it', mouth_controller=None):
         self.lang = lang
         self.__mouth_controller = mouth_controller
         self.__busy_observer = None
-        pygame.mixer.init()
-
-    def __observe_speaking(self):
-        while pygame.mixer.music.get_busy():
-            pass
-        self.__mouth_controller.stop_speak()
 
     def __say_blocking(self, text):
         tts = gTTS(text=text, lang=self.lang)
@@ -106,13 +101,11 @@ class TTS:
         os.remove(TTS.__TTS_FILE)
 
     def __play_file_blocking(self, filename):
-        while pygame.mixer.music.get_busy():
-            pass
-        pygame.mixer.music.load(filename)
-        pygame.mixer.music.play()
-        self.__mouth_controller.speak()
-        mouth_updater = Thread(target=self.__busy_observer)
-        mouth_updater.start()
+        if self.__mouth_controller is not None:
+            self.__mouth_controller.speak()
+        playsound(filename)
+        if self.__mouth_controller is not None:
+            self.__mouth_controller.stop_speak()
 
     def say(self, text):
         def player():
@@ -120,4 +113,9 @@ class TTS:
                 self.__play_file_blocking(text)
             else:
                 self.__say_blocking(text)
-        Thread(target=player)
+        Thread(target=player, name='Audio Player').start()
+
+
+if __name__ == '__main__':
+    t = TTS()
+    t.say('Ciao sono un tts')
