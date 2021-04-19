@@ -1,6 +1,9 @@
-import os
-from feet_answer import FeetAnswer
+from random import Random
 from time import time
+
+from feet_answer import FeetAnswer
+from led_matrices import LedMatrices
+from speech import SpeechRecognizer, TTS
 
 
 class Game:
@@ -8,14 +11,16 @@ class Game:
     NO_GAME_TIMEOUT = 10  # s
     REPEAT_ANSWER_TIMEOUT = 20  # s
 
-    def __init__(self, sensor_left, sensor_right, time_before_exit, speech_object, emotion_controller):
+    def __init__(self, sensor_left, sensor_right, time_before_exit):
         self.__sensor_right = sensor_right
         self.__sensor_left = sensor_left
         self.__time_before_exit = time_before_exit
-        self.__speech_object = speech_object
-        self.__emotion_controller = emotion_controller
+        self.__speech_object = TTS()
+        self.__speech_recognizer = SpeechRecognizer()
+        self.__emotion_controller = LedMatrices()
         self.__feet_receiver = FeetAnswer(self)
         self.__answer = None
+        self.__random = Random()
 
         self.__sound = {
             'one': 'sound1.mp3',
@@ -29,21 +34,18 @@ class Game:
         #sensor eneble to receive an answer
         # if no signal in a slot of time -> exit
         # else set answer
-        self.__feet_receiver.restart_routine()
-
-        timeout = time()
-        while self.__answer is None and time()-timeout < Game.NO_GAME_TIMEOUT:
-            pass
+        self.__get_answer(Game.NO_GAME_TIMEOUT)
 
         if self.__answer is None or not self.__answer:
             return
+        self.__answer = None
 
         self.__say('Ok! I will play two sounds, than you can answer')
 
         self.__say('Sound number 1')
-        self.__play_sound('one')
+        self.__say('one')
         self.__say('Sound number 2')
-        self.__play_sound('two')
+        self.__say('two')
 
         self.__say('Put you feet on left sensor to answer 1')
         self.__say('Put you feet on rigth sensor to answer 2')
@@ -51,37 +53,59 @@ class Game:
         #sensor enable to receive an answer
         # if no signal in a slot of time -> exit
         # else set answer
-        self.__feet_receiver.restart_routine()
-        timeout = time()
-        while self.__answer is None:
-            if time()-timeout < Game.REPEAT_ANSWER_TIMEOUT:     # repeat answer on timeout
-                self.__say('Ok! I will play two sounds, than you can answer')
 
-                self.__say('Sound number 1')
-                self.__play_sound('one')
-                self.__say('Sound number 2')
-                self.__play_sound('two')
+        def on_timeout():
+            self.__say('Ok! I will play two sounds, than you can answer')
 
-                timeout = time()
+            self.__say('Sound number 1')
+            self.__say('one')
+            self.__say('Sound number 2')
+            self.__say('two')
 
-        if self.__answer:
-            #self._show_emotion('happy')
-            self.__say('Right!')
+            return True
 
-        else:
-            #self._show_emotion('sad')
-            self.__say('Oh no! you loose')
+        self.__get_answer(Game.REPEAT_ANSWER_TIMEOUT, on_timeout)
+
+        if self.__answer is not None:
+            if self.__answer:
+                self.__show_emotion(False)
+                self.__say('Right!')
+            else:
+                self.__show_emotion(True)
+                self.__say('Oh no! you lost')
 
     def __say(self, text):
-        # say text, call external class
-        pass
+        self.__speech_object.say(text)
 
-    def __play_sound(self, sound_code):
-        os.system('mpg123 ' + self.__sound[sound_code])
-
-    def __show_emotion(self, emotion_string):
+    def __show_emotion(self, real_emotion):
         if self.__emotion_controller is not None:
-            self.__emotion_controller.show_emotion(emotion_string)
+            if real_emotion:
+                rand = self.__random.randint(1,3)
+                if rand == 1:
+                    self.__emotion_controller.eye_sad()
+                elif rand == 2:
+                    self.__emotion_controller.eye_bored()
+                elif rand == 3:
+                    self.__emotion_controller.eye_angry()
+            else:
+                self.__emotion_controller.eye_neutral()
+
+    def __get_answer(self, timeout, on_timeout=None):
+        """
+
+        :param timeout: the maximum time to wait for an answer
+        :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
+        """
+        self.__feet_receiver.restart_routine()
+        self.__speech_recognizer.listen_and_recognize(self)
+
+        start_time = time()
+        while self.__answer is None:
+            if time() - start_time < timeout:
+                pass
+            elif on_timeout is not None and on_timeout():
+                self.__get_answer(timeout, on_timeout)
 
     def receive_answer(self, answer):
-        self.__answer = answer
+        if self.__answer is None:
+            self.__answer = answer
