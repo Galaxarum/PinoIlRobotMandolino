@@ -46,7 +46,7 @@ class LedMatrices:
 
         serial1 = spi(port=1, device=0, gpio=noop())
         self.mouth_matrix = max7219(serial1)
-        self.mouth = viewport(self.mouth_matrix, width=32, height=16)
+        self.mouth = viewport(self.mouth_matrix, width=16, height=8)
 
         def scroll_mouth():
             while self.mouth is not None:
