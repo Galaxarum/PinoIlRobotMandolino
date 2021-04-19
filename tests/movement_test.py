@@ -11,7 +11,7 @@ class RobotTest:
     
     def __init__(self):
         self.__name = 'robot'
-        self.__robot = Robot(left=(13, 19), right=(5, 6))
+        self.__robot = Robot(left=(13, 26), right=(5, 6))
         print(f'{self.__name}: testing initiated')
         
     def __check_input(self):

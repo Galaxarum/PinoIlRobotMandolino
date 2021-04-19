@@ -7,7 +7,7 @@ from face_tracking.face_detector_listener import FaceDetectorEventListener
 class Movement(FaceDetectorEventListener):
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
-        self.__sensorFront = DistanceSensor(echo=23, trigger=24, threshold_distance=0.1)
+        self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.1)
         self.__sensorFront.when_in_range = self.__obstacle_front
         self.__sensorFront.when_out_of_range = lambda: self.move_idle(2)
 
@@ -18,7 +18,7 @@ class Movement(FaceDetectorEventListener):
         self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
 
-        self.__robot = Robot(left=(13, 19), right=(5, 6))
+        self.__robot = Robot(left=(13, 26), right=(5, 6))
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
