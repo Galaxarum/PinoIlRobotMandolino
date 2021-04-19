@@ -128,8 +128,8 @@ class FaceDetector:
 
         camera_device = self.__default_camera_device
         capture = cv.VideoCapture(camera_device)
-        capture.set(cv.CAP_PROP_FRAME_WIDTH, 640)
-        capture.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+        capture.set(cv.CAP_PROP_FRAME_WIDTH, self.__cam_res_width)
+        capture.set(cv.CAP_PROP_FRAME_HEIGHT, self.__cam_res_height)
 
         logging.debug('Check image capturing...')
 
