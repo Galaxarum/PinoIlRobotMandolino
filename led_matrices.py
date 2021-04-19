@@ -52,7 +52,7 @@ class LedMatrices:
             while self.mouth is not None:
                 for offset in range(self.mouth.width // 2):
                     self.mouth.set_position((offset, 0))
-                    sleep(0.1)
+                    sleep(0.05)
         Thread(target=scroll_mouth).start()
 
         self.eye_neutral()
@@ -72,7 +72,7 @@ class LedMatrices:
 
     def stop_speak(self):
         with canvas(self.mouth) as draw:
-            _plot_sin(draw, size=self.mouth.size, amplitude=2)
+            _plot_sin(draw, size=self.mouth.size, amplitude=2, steps=2)
 
     def __draw(self, drawing_function):
         with canvas(self.eyes) as draw:
