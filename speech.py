@@ -1,10 +1,9 @@
-import threading
-
-import speech_recognition as sr
-from gtts import gTTS
-import pygame
 import os
 from threading import Thread
+
+import pygame
+import speech_recognition as sr
+from gtts import gTTS
 
 
 class SpeechRecognizer:
@@ -76,10 +75,14 @@ class SpeechRecognizer:
 
         return result
 
-    def listen_and_recognize(self):
-        audio = self.get_audio()
-        print('acquired audio')
-        return self.recognize(audio)
+    def listen_and_recognize(self, game):
+        def underlying_function():
+            audio = self.get_audio()
+            print('acquired audio')
+            answer = self.recognize(audio)
+            game.receive_answer(answer)
+
+        Thread(target=underlying_function).start()
 
 
 class TTS:
