@@ -13,6 +13,7 @@ WAITING_INTERVAL = 40 # milliseconds
 CAM_RES_WIDTH = 640
 CAM_RES_HEIGHT = 480
 DEFAULT_CAMERA_DEVICE = 0
+MIRROR_CAMERA = False
 
 # --- FUNCTIONS ---
 
@@ -55,7 +56,7 @@ class Listener(FaceDetectorEventListener):
 
 if __name__ == '__main__':
     test_listener = Listener()
-    face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH, CAM_RES_HEIGHT)
+    face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH, CAM_RES_HEIGHT, MIRROR_CAMERA)
 
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 

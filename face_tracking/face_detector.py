@@ -11,7 +11,7 @@ import sys
 
 class FaceDetector:
 
-    def __init__(self, file_path, exit_char, waiting_interval, default_camera_device, cam_res_width, cam_res_height):
+    def __init__(self, file_path, exit_char, waiting_interval, default_camera_device, cam_res_width, cam_res_height, mirror_camera=False):
         # (Private)
         self.__file_path = file_path
         self.__exit_char = exit_char
@@ -19,6 +19,7 @@ class FaceDetector:
         self.__default_camera_device = default_camera_device
         self.__cam_res_width = cam_res_width
         self.__cam_res_height = cam_res_height
+        self.__mirror_camera = mirror_camera
 
         self.__face_cascade_classifier = None
         self.__color = (255, 0, 0)
@@ -33,6 +34,12 @@ class FaceDetector:
             event_listener.on_valid_face_present(self.__is_face_present)
 
     def __on_face_position(self):
+        if self.__mirror_camera:
+            if self.__current_face_position == FaceDetectorEventListener.RIGHT:
+                self.__current_face_position = FaceDetectorEventListener.LEFT
+            elif self.__current_face_position == FaceDetectorEventListener.LEFT:
+                self.__current_face_position = FaceDetectorEventListener.RIGHT
+
         for event_listener in self.__event_listeners:
             event_listener.on_face_position(self.__current_face_position)
 
