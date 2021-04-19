@@ -103,7 +103,7 @@ class TTS:
     def __play_file_blocking(self, filename):
         if self.__mouth_controller is not None:
             self.__mouth_controller.speak()
-        playsound(filename)
+        os.system(f'mpg123 {filename}')
         if self.__mouth_controller is not None:
             self.__mouth_controller.stop_speak()
 
