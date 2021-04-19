@@ -38,11 +38,11 @@ class Listener(FaceDetectorEventListener):
     def __init__(self):
         super().__init__()
 
-    def on_valid_face_present(self):
+    def on_valid_face_present(self, present):
         """
         Override
         """
-        print('Valid face present')
+        print('Valid face present:', present)
 
     def on_face_position(self, position):
         """

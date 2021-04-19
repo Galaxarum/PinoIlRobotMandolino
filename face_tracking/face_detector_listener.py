@@ -6,7 +6,7 @@ class FaceDetectorEventListener:
     def __init__(self):
         pass
 
-    def on_valid_face_present(self):
+    def on_valid_face_present(self, present):
         """
         Called when a face is being detected for a certain amount of time.
         """

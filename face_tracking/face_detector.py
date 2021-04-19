@@ -26,10 +26,11 @@ class FaceDetector:
         self.__frame_division = 3  # ! WARNING: This value is hardcoded since the code is developed on that value.
         self.__frame_width_block = cam_res_width // self.__frame_division
         self.__current_face_position = FaceDetectorEventListener.CENTER
+        self.__is_face_present = False
 
     def __on_valid_face_present(self):
         for event_listener in self.__event_listeners:
-            event_listener.on_valid_face_present()
+            event_listener.on_valid_face_present(self.__is_face_present)
 
     def __on_face_position(self):
         for event_listener in self.__event_listeners:
@@ -54,6 +55,7 @@ class FaceDetector:
 
         if len(faces) > 0:
             # Signal that a face has been recognized
+            self.__is_face_present = True
             self.__on_valid_face_present()
 
             biggest_face = faces[0]
@@ -92,6 +94,9 @@ class FaceDetector:
                 if self.__current_face_position != FaceDetectorEventListener.RIGHT:
                     self.__current_face_position = FaceDetectorEventListener.RIGHT
                     self.__on_face_position()
+        else:
+            self.__is_face_present = False
+            self.__on_valid_face_present()
 
         return frame
 
