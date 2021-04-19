@@ -69,15 +69,18 @@ class Movement(FaceDetectorEventListener):
     def on_face_position(self, position):
         if position == FaceDetectorEventListener.CENTER:
             self.__robot.forward(self.__standard_speed)
+            print('approaching person in front')
         elif position == FaceDetectorEventListener.LEFT:
             self.__robot.left(self.__standard_speed)
+            print('turning left')
         elif position == FaceDetectorEventListener.RIGHT:
             self.__robot.right(self.__standard_speed)
+            print('turning right')
         else:
             raise ValueError(f'Unexpected face position: {position}')
 
     def move_idle(self, wait=0):
-        print('Moving')
+        print('rotating forever (idle)')
         sleep(wait)
         self.__robot.right(speed=self.__standard_speed)
 
