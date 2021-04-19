@@ -2,6 +2,7 @@ from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
 from face_tracking.face_detector_listener import FaceDetectorEventListener
+import atexit
 
 
 class Movement(FaceDetectorEventListener):
@@ -22,6 +23,11 @@ class Movement(FaceDetectorEventListener):
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
+
+        atexit.register(lambda: self.__robot.close())
+        atexit.register(lambda: self.__sensorBack.close())
+        atexit.register(lambda: self.__sensorFront.close())
+        atexit.register(lambda: self.__line_sensor.close())
 
         print('Robot initialized')
 

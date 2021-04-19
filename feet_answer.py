@@ -1,4 +1,5 @@
 from gpiozero import DistanceSensor
+import atexit
 
 
 class FeetAnswer:
@@ -10,6 +11,9 @@ class FeetAnswer:
         self.__disabled = True
         self.__sensorLeft.when_in_range = self.__left_answer
         self.__sensorRight.when_in_range = self.__right_answer
+
+        atexit.register(lambda: self.__sensorRight.close())
+        atexit.register(lambda: self.__sensorLeft.close())
 
     def __end_routine(self):
         self.__disabled = True
