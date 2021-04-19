@@ -78,30 +78,15 @@ class LedMatrices:
         with canvas(self.eyes) as draw:
             drawing_function(draw)
 
-    def __eye_debug_drawer(self, draw):
-        draw.rectangle(self.eyes.bounding_box, outline="white", fill="black")
-        text(draw, (2, 2), 'Pino', fill='white')
-
     def __eye_neutral_drawer(self, draw):
         draw.arc(self.eyes.bounding_box, 0, 360, fill='white')
         draw.ellipse([(6, 6), (9, 9)], outline='white', fill='white')
 
-    def __eye_angry_drawer(self, draw, angle):
-        self.__eye_neutral_drawer(draw)
-        draw.pieslice([(0, 0), (15, 15)], 180+angle, -angle, fill='white')
-
-    def __eye_flat_drawer(self, draw, angle):
-        self.__eye_neutral_drawer(draw)
-        draw.chord([(0, 0), (15, 15)], 180 + angle, -angle, outline='white', fill='white')
-
-    def __eye_sad_drawer(self, draw, angle):
-        self.__eye_neutral_drawer(draw)
-        draw.chord([(0, 0), (15, 15)], 180, -angle, fill='white')
-        draw.chord([(0, 0), (15, 15)], 180 + angle, 360, fill='white')
-
     def eye_debug(self):
-        self.__draw(self.__eye_debug_drawer)
-        sleep(1)
+        with canvas(self.eyes) as draw:
+            draw.rectangle(self.eyes.bounding_box, outline="white", fill="black")
+            text(draw, (2, 2), 'Pino', fill='white')
+            sleep(1)
         self.eye_neutral()
         sleep(1)
         self.eye_suspicious()
@@ -115,16 +100,27 @@ class LedMatrices:
         self.eyes.clear()
 
     def eye_neutral(self):
-        self.__draw(self.__eye_neutral_drawer)
+        with canvas(self.eyes) as draw:
+            self.__eye_neutral_drawer(draw)
 
     def eye_angry(self, angle=20):
-        self.__draw(lambda draw: self.__eye_angry_drawer(draw, angle=angle))
+        with canvas(self.eyes) as draw:
+            self.__eye_neutral_drawer(draw)
+            draw.pieslice([(0, 0), (15, 15)], 180 + angle, -angle, fill='white')
 
-    def eye_suspicious(self, angle=25):
-        self.__draw(lambda draw: self.__eye_flat_drawer(draw, angle=angle))
+    def eye_flat(self, angle=17):
+        with canvas(self.eyes) as draw:
+            self.__eye_neutral_drawer(draw)
+            draw.chord([(0, 0), (15, 15)], 180 + angle, -angle, outline='white', fill='white')
 
-    def eye_bored(self, angle=10):
-        self.__draw(lambda draw: self.__eye_flat_drawer(draw, angle=angle))
+    def eye_suspicious(self):
+        self.eye_flat(angle=25)
+
+    def eye_bored(self):
+        self.eye_flat(angle=10)
 
     def eye_sad(self, angle=45):
-        self.__draw(lambda draw: self.__eye_sad_drawer(draw, angle=angle))
+        with canvas(self.eyes) as draw:
+            self.__eye_neutral_drawer(draw)
+            draw.chord([(0, 0), (15, 15)], 180, -angle, fill='white')
+            draw.chord([(0, 0), (15, 15)], 180 + angle, 360, fill='white')
