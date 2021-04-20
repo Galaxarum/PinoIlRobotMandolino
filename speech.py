@@ -16,10 +16,11 @@ class SpeechRecognizer:
         self.__IBM_USERNAME = "INSERT IBM SPEECH TO TEXT USERNAME HERE"
         # IBM Speech to Text passwords are mixed-case alphanumeric strings
         self.__IBM_PASSWORD = "INSERT IBM SPEECH TO TEXT PASSWORD HERE"
+        with sr.Microphone() as mic:
+            self.__recognizer.adjust_for_ambient_noise(mic, 5)
 
     def get_audio(self):
         with sr.Microphone() as mic:
-            self.__recognizer.adjust_for_ambient_noise(mic)
             print("Listening for audio")
             return self.__recognizer.record(mic, duration=5)
 
