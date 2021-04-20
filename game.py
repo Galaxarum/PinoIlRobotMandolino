@@ -12,9 +12,9 @@ class Game:
     REPEAT_ANSWER_TIMEOUT = 20  # s
 
     def __init__(self):
-        self.__speech_object = TTS()
         self.__speech_recognizer = SpeechRecognizer()
         self.__emotion_controller = LedMatrices()
+        self.__speech_object = TTS(mouth_controller=self.__emotion_controller)
         self.__feet_receiver = FeetAnswer(self)
         self.__answer = None
         self.__random = Random()
