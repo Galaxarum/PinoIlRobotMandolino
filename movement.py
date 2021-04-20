@@ -70,7 +70,8 @@ class Movement(FaceDetectorEventListener):
         if present:
             pass
         else:
-            self.move_idle()
+            #self.move_idle()
+            pass
 
     def on_face_position(self, position):
         if position == FaceDetectorEventListener.CENTER:
