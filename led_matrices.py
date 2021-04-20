@@ -104,10 +104,10 @@ class LedMatrices:
         with canvas(self.eyes) as draw:
             self.__eye_neutral_drawer(draw)
 
-    def eye_angry(self, angle=20):
+    def eye_angry(self, angle=30):
         with canvas(self.eyes) as draw:
             self.__eye_neutral_drawer(draw)
-            draw.pieslice([(0, 0), (15, 15)], 180 + angle, -angle, fill='white')
+            draw.pieslice([(3, 0), (12, 10)], 180 + angle, -angle, fill='white')
 
     def eye_flat(self, angle=17):
         with canvas(self.eyes) as draw:
