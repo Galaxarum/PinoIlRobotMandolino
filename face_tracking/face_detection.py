@@ -1,5 +1,6 @@
 from face_detector import FaceDetector
 from face_detector_listener import FaceDetectorEventListener
+from movement import Movement
 import logging
 import sys
 
@@ -56,13 +57,14 @@ class Listener(FaceDetectorEventListener):
 
 if __name__ == '__main__':
     test_listener = Listener()
+    m = Movement()
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH, CAM_RES_HEIGHT, MIRROR_CAMERA)
 
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
     print_init_info()
 
-    face_detector.add_event_listener(test_listener)
+    face_detector.add_event_listener(m)
     face_detector.start_detection()
 
     print('Terminated')
