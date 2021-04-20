@@ -34,7 +34,7 @@ def print_init_info():
 
 if __name__ == '__main__':
     # test_listener = Listener()
-    m = Movement()
+    m = Movement(standard_speed=0.5, avoidance_speed=0.5)
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
                                  CAM_RES_HEIGHT, MIRROR_CAMERA)
 
