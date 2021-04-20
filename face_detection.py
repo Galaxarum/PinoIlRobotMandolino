@@ -79,6 +79,7 @@ class FaceDetector(Thread):
 
         self.__current_face_position = FaceDetectorEventListener.CENTER
         self.__is_face_present = False
+        self.__log = logging.getLogger('face detection')
 
     def run(self):
         self.start_detection()
@@ -141,17 +142,17 @@ class FaceDetector(Thread):
             # Find, basing on the face center, the portion of the frame in which the face is contained.
             # If the position is different from the previous one, an event is thrown.
             if center[0] in range(0, self.__frame_width_block + self.__center_side_frame_offset):
-                logging.debug('face left')
+                self.__log.debug('face left')
                 if self.__current_face_position != FaceDetectorEventListener.LEFT:
                     self.__current_face_position = FaceDetectorEventListener.LEFT
                     self.__on_face_position()
             elif center[0] in range(self.__frame_width_block + self.__center_side_frame_offset, (2 * self.__frame_width_block) - self.__center_side_frame_offset):
-                logging.debug('face center')
+                self.__log.debug('face center')
                 if self.__current_face_position != FaceDetectorEventListener.CENTER:
                     self.__current_face_position = FaceDetectorEventListener.CENTER
                     self.__on_face_position()
             elif center[0] in range((2 * self.__frame_width_block) - self.__center_side_frame_offset, (3 * self.__frame_width_block)):
-                logging.debug('face right')
+                self.__log.debug('face right')
                 if self.__current_face_position != FaceDetectorEventListener.RIGHT:
                     self.__current_face_position = FaceDetectorEventListener.RIGHT
                     self.__on_face_position()
@@ -167,32 +168,31 @@ class FaceDetector(Thread):
 
         ! This is a blocking method
         """
-        logging.basicConfig(level=logging.DEBUG)
         face_cascade_file_name = self.__file_path['FACE_SAMPLES_FILE']
         self.__face_cascade_classifier = cv.CascadeClassifier()
         camera_device = None
         capture = None
 
-        logging.debug('Loading samples...')
+        self.__log.debug('Loading samples...')
 
         if not self.__face_cascade_classifier.load(cv.samples.findFile(face_cascade_file_name)):
             print('Samples loading error')
             exit(0)
 
-        logging.debug('Loading samples OK')
+        self.__log.debug('Loading samples OK')
 
         camera_device = self.__default_camera_device
         capture = cv.VideoCapture(camera_device)
         capture.set(cv.CAP_PROP_FRAME_WIDTH, self.__cam_res_width)
         capture.set(cv.CAP_PROP_FRAME_HEIGHT, self.__cam_res_height)
 
-        logging.debug('Check image capturing...')
+        self.__log.debug('Check image capturing...')
 
         if not capture.isOpened():
             print('Video Capture error')
             exit(0)
 
-        logging.debug('Check image capturing OK')
+        self.__log.debug('Check image capturing OK')
 
         while True:
             return_value, frame = capture.read()

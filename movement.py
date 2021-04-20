@@ -32,7 +32,8 @@ class Movement(FaceDetectorEventListener):
 
         self.move_idle()
 
-        #logging.info('Movement initialized')
+        self.__log = logging.getLogger('movement')
+        self.__log.info('Movement initialized')
 
     def __avoid_line(self):
         return #todo: re-enable me
@@ -63,11 +64,11 @@ class Movement(FaceDetectorEventListener):
         print('waiting to leave triggering line')
 
     def __obstacle_front(self):
-        #logging.info('Avoiding obstacle on front')
+        self.__log.info('Avoiding obstacle on front')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def __obstacle_back(self):
-        #logging.info('Avoiding obstacle on back')
+        self.__log.info('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def on_valid_face_present(self, present):
@@ -80,18 +81,18 @@ class Movement(FaceDetectorEventListener):
     def on_face_position(self, position):
         if position == FaceDetectorEventListener.CENTER:
             self.__robot.forward(self.__standard_speed)
-            #logging.info('approaching person in front')
+            self.__log.info('approaching person in front')
         elif position == FaceDetectorEventListener.LEFT:
             self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
-            #logging.info('turning left')
+            self.__log.info('turning left')
         elif position == FaceDetectorEventListener.RIGHT:
             self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
-            #logging.info('turning right')
+            self.__log.info('turning right')
         else:
             raise ValueError(f'Unexpected face position: {position}')
 
     def move_idle(self, wait=0):
-        #logging.info('rotating forever (idle)')
+        self.__log.info('rotating forever (idle)')
         sleep(wait)
         self.__robot.right(speed=self.__standard_speed)
 
