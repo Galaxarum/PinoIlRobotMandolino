@@ -1,5 +1,6 @@
 from random import Random
 from time import time
+from time import sleep
 
 from feet_answer import FeetAnswer
 from led_matrices import LedMatrices
@@ -72,7 +73,8 @@ class Game:
                 self.__say('Oh no! you lost')
 
     def __say(self, text):
-        self.__speech_object.say(text)
+        self.__speech_object.say(text, blocking=True)
+        print(text)
 
     def __show_emotion(self, real_emotion):
         if self.__emotion_controller is not None:
@@ -94,14 +96,17 @@ class Game:
         :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
         """
         self.__feet_receiver.restart_routine()
-        self.__speech_recognizer.listen_and_recognize(self)
+        #self.__speech_recognizer.listen_and_recognize(self)
 
         start_time = time()
         while self.__answer is None:
             if time() - start_time < timeout:
-                pass
+                sleep(0.1)
+                print('time tick...')
             elif on_timeout is not None and on_timeout():
                 self.__get_answer(timeout, on_timeout)
+            else:
+                return
 
     def receive_answer(self, answer):
         if self.__answer is None:

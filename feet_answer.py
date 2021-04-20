@@ -20,15 +20,17 @@ class FeetAnswer:
 
     def restart_routine(self):
         self.__disabled = False
+        print('Sensors disabled')
 
     def __left_answer(self):
+        print('left')
         if not self.__disabled:
-            self.__game.receive_answer(True)
             print("True answer")
+            self.__game.receive_answer(True)
             self.__end_routine()
 
     def __right_answer(self):
         if not self.__disabled:
-            self.__game.receive_answer(False)
             print("False answer")
+            self.__game.receive_answer(False)
             self.__end_routine()
