@@ -21,7 +21,7 @@ class SpeechRecognizer:
         with sr.Microphone() as mic:
             self.__recognizer.adjust_for_ambient_noise(mic)
             print("Listening for audio")
-            return self.__recognizer.listen(mic, timeout=5, phrase_time_limit=5)
+            return self.__recognizer.record(mic, duration=5)
 
     def recognize(self, audio):
         result = None
