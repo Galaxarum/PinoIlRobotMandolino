@@ -32,6 +32,7 @@ class Movement(FaceDetectorEventListener):
         print('Robot initialized')
 
     def __avoid_line(self):
+        return #todo: re-enable me
         print('Starting line avoidance routine')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
 
