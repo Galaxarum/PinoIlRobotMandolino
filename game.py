@@ -81,7 +81,7 @@ class Game:
             if real_emotion:
                 rand = self.__random.randint(1,3)
                 if rand == 1:
-                    self.__emotion_controller.eye_sad()
+                    self.__emotion_controller.eye_sad(60)
                 elif rand == 2:
                     self.__emotion_controller.eye_bored()
                 elif rand == 3:

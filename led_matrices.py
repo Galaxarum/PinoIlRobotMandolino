@@ -57,7 +57,6 @@ class LedMatrices:
                     sleep(0.05)
         Thread(target=scroll_mouth, name='Mouth scroller').start()
 
-
         self.eye_neutral()
         self.stop_speak()
 
