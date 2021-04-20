@@ -72,8 +72,11 @@ class FaceDetector(Thread):
         self.__face_cascade_classifier = None
         self.__color = (255, 0, 0)
         self.__event_listeners = []
+
         self.__frame_division = 3  # ! WARNING: This value is hardcoded since the code is developed on that value.
         self.__frame_width_block = cam_res_width // self.__frame_division
+        self.__center_side_frame_offset = 30
+
         self.__current_face_position = FaceDetectorEventListener.CENTER
         self.__is_face_present = False
 
@@ -137,17 +140,17 @@ class FaceDetector(Thread):
 
             # Find, basing on the face center, the portion of the frame in which the face is contained.
             # If the position is different from the previous one, an event is thrown.
-            if center[0] in range(0, self.__frame_width_block):
+            if center[0] in range(0, self.__frame_width_block + self.__center_side_frame_offset):
                 logging.debug('face left')
                 if self.__current_face_position != FaceDetectorEventListener.LEFT:
                     self.__current_face_position = FaceDetectorEventListener.LEFT
                     self.__on_face_position()
-            elif center[0] in range(self.__frame_width_block, (2 * self.__frame_width_block)):
+            elif center[0] in range(self.__frame_width_block + self.__center_side_frame_offset, (2 * self.__frame_width_block) - self.__center_side_frame_offset):
                 logging.debug('face center')
                 if self.__current_face_position != FaceDetectorEventListener.CENTER:
                     self.__current_face_position = FaceDetectorEventListener.CENTER
                     self.__on_face_position()
-            elif center[0] in range((2 * self.__frame_width_block), (3 * self.__frame_width_block)):
+            elif center[0] in range((2 * self.__frame_width_block) - self.__center_side_frame_offset, (3 * self.__frame_width_block)):
                 logging.debug('face right')
                 if self.__current_face_position != FaceDetectorEventListener.RIGHT:
                     self.__current_face_position = FaceDetectorEventListener.RIGHT
