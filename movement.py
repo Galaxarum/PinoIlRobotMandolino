@@ -1,7 +1,7 @@
 from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
-from face_tracking.face_detector_listener import FaceDetectorEventListener
+from face_detection import FaceDetectorEventListener
 import atexit
 
 
