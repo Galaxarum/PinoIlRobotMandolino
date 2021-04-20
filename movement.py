@@ -30,10 +30,10 @@ class Movement(FaceDetectorEventListener):
         atexit.register(lambda: self.__sensorFront.close())
         atexit.register(lambda: self.__line_sensor.close())
 
-        self.move_idle()
-
         self.__log = logging.getLogger('movement')
         self.__log.info('Movement initialized')
+
+        self.move_idle()
 
     def __avoid_line(self):
         return #todo: re-enable me
