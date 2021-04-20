@@ -3,6 +3,7 @@ from time import sleep
 from gpiozero import DistanceSensor, Robot, LineSensor
 from face_detection import FaceDetectorEventListener
 import atexit
+import logging
 
 
 class Movement(FaceDetectorEventListener):
@@ -29,7 +30,9 @@ class Movement(FaceDetectorEventListener):
         atexit.register(lambda: self.__sensorFront.close())
         atexit.register(lambda: self.__line_sensor.close())
 
-        print('Robot initialized')
+        self.move_idle()
+
+        logging.info('Movement initialized')
 
     def __avoid_line(self):
         return #todo: re-enable me
@@ -60,11 +63,11 @@ class Movement(FaceDetectorEventListener):
         print('waiting to leave triggering line')
 
     def __obstacle_front(self):
-        print('Avoiding obstacle on front')
+        logging.info('Avoiding obstacle on front')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def __obstacle_back(self):
-        print('Avoiding obstacle on back')
+        logging.info('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
 
     def on_valid_face_present(self, present):
@@ -77,18 +80,18 @@ class Movement(FaceDetectorEventListener):
     def on_face_position(self, position):
         if position == FaceDetectorEventListener.CENTER:
             self.__robot.forward(self.__standard_speed)
-            print('approaching person in front')
+            logging.info('approaching person in front')
         elif position == FaceDetectorEventListener.LEFT:
             self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
-            print('turning left')
+            logging.info('turning left')
         elif position == FaceDetectorEventListener.RIGHT:
             self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
-            print('turning right')
+            logging.info('turning right')
         else:
             raise ValueError(f'Unexpected face position: {position}')
 
     def move_idle(self, wait=0):
-        print('rotating forever (idle)')
+        logging.info('rotating forever (idle)')
         sleep(wait)
         self.__robot.right(speed=self.__standard_speed)
 
