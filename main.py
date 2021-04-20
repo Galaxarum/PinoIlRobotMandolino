@@ -38,7 +38,7 @@ if __name__ == '__main__':
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
                                  CAM_RES_HEIGHT, MIRROR_CAMERA)
 
-    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
     print_init_info()
 
