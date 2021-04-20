@@ -5,8 +5,8 @@
 
 from __future__ import print_function
 import cv2 as cv
+from threading import Thread
 import logging
-import sys
 
 
 
@@ -54,10 +54,12 @@ class Listener(FaceDetectorEventListener):
         print('Face position changed:', position)
 
 
-class FaceDetector:
+class FaceDetector(Thread):
 
     def __init__(self, file_path, exit_char, waiting_interval, default_camera_device, cam_res_width, cam_res_height,
                  mirror_camera=False):
+        super().__init__()
+
         # (Private)
         self.__file_path = file_path
         self.__exit_char = exit_char
@@ -74,6 +76,9 @@ class FaceDetector:
         self.__frame_width_block = cam_res_width // self.__frame_division
         self.__current_face_position = FaceDetectorEventListener.CENTER
         self.__is_face_present = False
+
+    def run(self):
+        self.start_detection()
 
     def __on_valid_face_present(self):
         for event_listener in self.__event_listeners:
