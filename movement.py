@@ -2,6 +2,7 @@ from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
 from face_detection import FaceDetectorEventListener
+from threading import Lock
 import atexit
 import logging
 
@@ -34,9 +35,11 @@ class Movement(FaceDetectorEventListener):
         self.__log.info('Movement initialized')
 
         self.move_idle()
+        self.__avoiding = False
 
     def __avoid_line(self):
         return #todo: re-enable me
+        self.__avoiding = True
         print('Starting line avoidance routine')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
 
@@ -58,38 +61,45 @@ class Movement(FaceDetectorEventListener):
             self.__line_sensor.when_line = self.__avoid_line
             self.__line_sensor.when_no_line = None
             print('Line avoidance finished')
+            self.__avoiding = False
 
         self.__line_sensor.when_line = None
         self.__line_sensor.when_no_line = on_leave_triggering_line
         print('waiting to leave triggering line')
 
     def __obstacle_front(self):
+        self.__avoiding = True
         self.__log.info('Avoiding obstacle on front')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
+        self.__avoiding = False
 
     def __obstacle_back(self):
+        self.__avoiding = True
         self.__log.info('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
+        self.__avoiding = False
 
     def on_valid_face_present(self, present):
-        if present:
-            pass
-        else:
-            #self.move_idle()
-            pass
+        if not self.__avoiding:
+            if present:
+                pass
+            else:
+                #self.move_idle()
+                pass
 
     def on_face_position(self, position):
-        if position == FaceDetectorEventListener.CENTER:
-            self.__robot.forward(self.__standard_speed)
-            self.__log.info('approaching person in front')
-        elif position == FaceDetectorEventListener.LEFT:
-            self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
-            self.__log.info('turning left')
-        elif position == FaceDetectorEventListener.RIGHT:
-            self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
-            self.__log.info('turning right')
-        else:
-            raise ValueError(f'Unexpected face position: {position}')
+        if not self.__avoiding:
+            if position == FaceDetectorEventListener.CENTER:
+                self.__robot.forward(self.__standard_speed)
+                self.__log.info('approaching person in front')
+            elif position == FaceDetectorEventListener.LEFT:
+                self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
+                self.__log.info('turning left')
+            elif position == FaceDetectorEventListener.RIGHT:
+                self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
+                self.__log.info('turning right')
+            else:
+                raise ValueError(f'Unexpected face position: {position}')
 
     def move_idle(self, wait=0):
         self.__log.info('rotating forever (idle)')
