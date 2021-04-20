@@ -1,10 +1,10 @@
+import atexit
+import logging
 from time import sleep
 
 from gpiozero import DistanceSensor, Robot, LineSensor
+
 from face_detection import FaceDetectorEventListener
-from threading import Lock
-import atexit
-import logging
 
 
 class Movement(FaceDetectorEventListener):
@@ -35,11 +35,9 @@ class Movement(FaceDetectorEventListener):
         self.__log.info('Movement initialized')
 
         self.move_idle()
-        self.__avoiding = False
 
     def __avoid_line(self):
         return #todo: re-enable me
-        self.__avoiding = True
         print('Starting line avoidance routine')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
 
@@ -57,30 +55,27 @@ class Movement(FaceDetectorEventListener):
             print('waiting to leave line on back')
 
         def on_leave_ending_line():
-            sleep(1)
             self.__line_sensor.when_line = self.__avoid_line
             self.__line_sensor.when_no_line = None
             print('Line avoidance finished')
-            self.__avoiding = False
 
         self.__line_sensor.when_line = None
         self.__line_sensor.when_no_line = on_leave_triggering_line
         print('waiting to leave triggering line')
 
     def __obstacle_front(self):
-        self.__avoiding = True
         self.__log.info('Avoiding obstacle on front')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
-        self.__avoiding = False
 
     def __obstacle_back(self):
-        self.__avoiding = True
         self.__log.info('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
-        self.__avoiding = False
+
+    def __avoiding(self):
+        return self.__sensorFront.in_range or self.__sensorBack.in_range or self.__line_sensor.when_line == self.__avoid_line
 
     def on_valid_face_present(self, present):
-        if not self.__avoiding:
+        if not self.__avoiding():
             if present:
                 pass
             else:
@@ -88,7 +83,7 @@ class Movement(FaceDetectorEventListener):
                 pass
 
     def on_face_position(self, position):
-        if not self.__avoiding:
+        if not self.__avoiding():
             if position == FaceDetectorEventListener.CENTER:
                 self.__robot.forward(self.__standard_speed)
                 self.__log.info('approaching person in front')
