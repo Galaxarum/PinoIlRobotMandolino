@@ -167,6 +167,7 @@ class FaceDetector(Thread):
 
         ! This is a blocking method
         """
+        logging.basicConfig(level=logging.DEBUG)
         face_cascade_file_name = self.__file_path['FACE_SAMPLES_FILE']
         self.__face_cascade_classifier = cv.CascadeClassifier()
         camera_device = None
