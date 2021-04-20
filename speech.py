@@ -1,6 +1,5 @@
 import os
 from threading import Thread
-from time import sleep
 
 import speech_recognition as sr
 from gtts import gTTS
@@ -17,23 +16,12 @@ class SpeechRecognizer:
         self.__IBM_USERNAME = "INSERT IBM SPEECH TO TEXT USERNAME HERE"
         # IBM Speech to Text passwords are mixed-case alphanumeric strings
         self.__IBM_PASSWORD = "INSERT IBM SPEECH TO TEXT PASSWORD HERE"
-        self.__recognizer.energy_threshold = 200
 
     def get_audio(self):
         with sr.Microphone() as mic:
             self.__recognizer.adjust_for_ambient_noise(mic)
             print("Listening for audio")
-            result = None
-
-            def set_result(audio):
-                nonlocal result
-                result = audio
-
-            stopper = self.__recognizer.listen_in_background(mic, set_result, phrase_time_limit=5)
-            while result is None:
-                sleep(0.1)
-            stopper()
-            return result
+            return self.__recognizer.listen(mic, timeout=5, phrase_time_limit=5)
 
     def recognize(self, audio):
         result = None
