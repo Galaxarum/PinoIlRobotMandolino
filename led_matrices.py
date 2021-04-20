@@ -60,13 +60,14 @@ class LedMatrices:
         self.eye_neutral()
         self.stop_speak()
 
-        atexit.register(self.clear)
+        atexit.register(lambda: self.clear())
 
     def clear(self):
+        self.enabled = False
         self.mouth.clear()
         self.mouth_matrix.clear()
         self.eyes.clear()
-
+        
     def speak(self):
         with canvas(self.mouth) as draw:
             _plot_sin(draw, size=self.mouth.size)
