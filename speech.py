@@ -51,33 +51,6 @@ class SpeechRecognizer:
         except sr.RequestError as ex:
             print("Could not request results from Google Speech Recognition service", ex)
 
-        if result is not None:
-            return result
-        # fallback to google cloud
-        try:
-            result = self.__recognizer.recognize_google_cloud(audio, language=self.lang,
-                                                              credentials_json=self.__GOOGLE_CLOUD_SPEECH_CREDENTIALS)
-            print("Google Cloud Speech thinks you said ", result)
-        except sr.UnknownValueError:
-            print("Google Cloud Speech could not understand audio")
-        except sr.RequestError as e:
-            print("Could not request results from Google Cloud Speech service; {0}".format(e))
-
-        if result is not None:
-            return result
-        # recognize speech using IBM Speech to Text
-        try:
-            result = self.__recognizer.recognize_ibm(audio, language=self.lang,
-                                                     username=self.__IBM_USERNAME, password=self.__IBM_PASSWORD)
-            print("IBM Speech to Text thinks you said " + result)
-        except sr.UnknownValueError:
-            print("IBM Speech to Text could not understand audio")
-        except sr.RequestError as e:
-            print("Could not request results from IBM Speech to Text service; {0}".format(e))
-
-        if result is not None:
-            return result
-
         try:
             result = self.__recognizer.recognize_sphinx(audio, language=self.lang)
             print("Sphinx thinks you said ", result)

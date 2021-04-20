@@ -6,7 +6,7 @@ from threading import Thread
 class DistanceSensorTest:
     def __init__(self, name, echo, trigger):
         self.__name = name
-        self.__sensor = DistanceSensor(echo=echo, trigger=trigger, threshold_distance=0.1)
+        self.__sensor = DistanceSensor(echo=echo, trigger=trigger, threshold_distance=0.4)
         self.__sensor.when_in_range = lambda: print(f'{name}: in range (callback)')
         self.__sensor.when_out_of_range = lambda: print(f'{name}: out of range (callback)')
         self.__printer_thread = None
