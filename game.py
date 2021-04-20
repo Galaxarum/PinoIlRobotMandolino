@@ -41,9 +41,9 @@ class Game:
         self.__say('Ok! I will play two sounds, than you can answer')
 
         self.__say('Sound number 1')
-        self.__say('one')
+        self.__say(self.__sound['one'])
         self.__say('Sound number 2')
-        self.__say('two')
+        self.__say(self.__sound['two'])
 
         self.__say('Put you feet on left sensor to answer 1')
         self.__say('Put you feet on rigth sensor to answer 2')
@@ -96,7 +96,7 @@ class Game:
         :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
         """
         self.__feet_receiver.restart_routine()
-        #self.__speech_recognizer.listen_and_recognize(self)
+        self.__speech_recognizer.listen_and_recognize(self)
 
         start_time = time()
         while self.__answer is None:
