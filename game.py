@@ -5,6 +5,7 @@ from time import sleep
 from feet_answer import FeetAnswer
 from led_matrices import LedMatrices
 from speech import SpeechRecognizer, TTS
+from tests.game_test import GameTest
 
 
 class Game:
@@ -17,6 +18,7 @@ class Game:
         self.__emotion_controller = LedMatrices()
         self.__speech_object = TTS(mouth_controller=self.__emotion_controller)
         self.__feet_receiver = FeetAnswer(self)
+        self.__game_handler = GameTest()
         self.__answer = None
         self.__random = Random()
 
@@ -29,48 +31,51 @@ class Game:
 
         self.__say('hello! do you want to play a game?')
 
-        #sensor eneble to receive an answer
+        # sensor enable to receive an answer
         # if no signal in a slot of time -> exit
         # else set answer
+
         self.__get_answer(Game.NO_GAME_TIMEOUT)
 
         if self.__answer is None or not self.__answer:
             return
         self.__answer = None
 
-        self.__say('Ok! I will play two sounds, than you can answer')
-
-        self.__say('Sound number 1')
-        self.__say(self.__sound['one'])
-        self.__say('Sound number 2')
-        self.__say(self.__sound['two'])
-
-        self.__say('Put you feet on left sensor to answer 1')
-        self.__say('Put you feet on rigth sensor to answer 2')
-
-        #sensor enable to receive an answer
-        # if no signal in a slot of time -> exit
-        # else set answer
+        self.__say('Ok! Lets start the game')
+        self.__say('Put you feet on the right sensor to choose the first answer')
+        self.__say('Put you feet on the left sensor to choose the second answer')
 
         def on_timeout():
-            self.__say('Ok! I will play two sounds, than you can answer')
-
-            self.__say('Sound number 1')
-            self.__say('one')
-            self.__say('Sound number 2')
-            self.__say('two')
+            self.__say('Ok! Lets start the game')
+            self.__say('Put you feet on the right sensor to choose the first answer')
+            self.__say('Put you feet on the left sensor to choose the second answer')
 
             return True
 
-        self.__get_answer(Game.REPEAT_ANSWER_TIMEOUT, on_timeout)
+        for i in range(3):
+            element = self.__game_handler.retrieve_element()
+            self.__say(element[0])
+            self.__say(element[1])
+            self.__say(element[2])
 
-        if self.__answer is not None:
-            if self.__answer:
-                self.__show_emotion(False)
-                self.__say('Right!')
-            else:
-                self.__show_emotion(True)
-                self.__say('Oh no! you lost')
+            # sensor enable to receive an answer
+            # if no signal in a slot of time -> exit
+            # else set answer
+
+            self.__get_answer(Game.REPEAT_ANSWER_TIMEOUT, on_timeout)
+
+            if self.__answer is not None:
+                if self.__answer:
+                    checked_answer = self.__game_handler.check_answer(element[0], element[1])
+                else:
+                    checked_answer = self.__game_handler.check_answer(element[0], element[2])
+
+                if checked_answer:
+                    self.__show_emotion(False)
+                    self.__say('Right!')
+                else:
+                    self.__show_emotion(True)
+                    self.__say('Oh no! you lost')
 
     def __say(self, text):
         self.__speech_object.say(text, blocking=True)
@@ -79,7 +84,7 @@ class Game:
     def __show_emotion(self, real_emotion):
         if self.__emotion_controller is not None:
             if real_emotion:
-                rand = self.__random.randint(1,3)
+                rand = self.__random.randint(1, 3)
                 if rand == 1:
                     self.__emotion_controller.eye_sad(60)
                 elif rand == 2:

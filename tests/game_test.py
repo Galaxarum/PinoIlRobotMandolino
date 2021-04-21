@@ -13,38 +13,28 @@ class GameTest:
 
         random.shuffle(GameTest.game_elements)
         self.__chosen = GameTest.game_elements[:3]
-        self.__answer = False
-        self.__random = random.Random()
-        self.__shuffled = False
-
-    def start(self):
-
+        self.__answer = None
+        self.__index = 0
         for c in self.__chosen:
-            print("Question number", self.__chosen.index(c)+1)
-            rand = self.__random.randint(1, 2)
+            rand = random.randint(1, 2)
             if rand == 2:
-                self.__shuffled = True
                 temp = c[1]
                 c[1] = c[2]
                 c[2] = temp
 
-            print(c[0])
-            print(c[1])
-            print(c[2])
-            if self.__answer and not self.__shuffled:
-                print("Right!")
-            elif self.__answer and self.__shuffled:
-                print("Wrong!")
-            elif not self.__answer and self.__shuffled:
-                print("Right!")
-            else:
-                print("Wrong!")
+    def retrieve_element(self):
 
-            self.__shuffled = False
-            print("Phase", self.__chosen.index(c)+1, "ended\n")
+        element = self.__chosen[self.__index]
+        self.__index = self.__index + 1
+        return element
 
-        print("Game ended")
+    def check_answer(self, question, answer):
 
-
-g = GameTest()
-g.start()
+        questions_list = []
+        for q in GameTest.game_elements:
+            questions_list.append(q[0])
+        question_number = questions_list.index(question)
+        if answer == GameTest.game_elements[question_number][1]:
+            return True
+        else:
+            return False
