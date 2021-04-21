@@ -12,17 +12,14 @@ class Movement(FaceDetectorEventListener):
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
         self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.1)
         self.__sensorFront.when_in_range = self.__obstacle_front
-        self.__sensorFront.when_out_of_range = lambda: self.move_idle(2)
 
         self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.1)
         self.__sensorBack.when_in_range = self.__obstacle_back
-        self.__sensorBack.when_out_of_range = lambda: self.move_idle(2)
 
         self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
 
         self.__robot = Robot(left=(13, 26), right=(5, 6))
-        #self.__robot = Robot(left=(5, 6), right=(13, 26))
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
@@ -36,6 +33,12 @@ class Movement(FaceDetectorEventListener):
         self.__log.info('Movement initialized')
 
         self.move_idle()
+
+    def __stop_avoiding(self):
+        self.__sensorFront.when_out_of_range = None
+        self.__sensorBack.when_out_of_range = None
+        self.__line_sensor.when_line = self.__avoid_line
+        self.__line_sensor.when_no_line = None
 
     def __avoid_line(self):
         return #todo: re-enable me
@@ -65,15 +68,27 @@ class Movement(FaceDetectorEventListener):
         print('waiting to leave triggering line')
 
     def __obstacle_front(self):
+        def on_avoiding_ended():
+            self.__sensorFront.when_out_of_range = None
+            self.move_idle(2)
+        self.__stop_avoiding()
         self.__log.info('Avoiding obstacle on front')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
+        self.__sensorFront.when_out_of_range = on_avoiding_ended
 
     def __obstacle_back(self):
+        def on_avoiding_ended():
+            self.__sensorBack.when_out_of_range = None
+            self.move_idle(2)
+        self.__stop_avoiding()
         self.__log.info('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
+        self.__sensorBack.when_out_of_range = on_avoiding_ended
 
     def __avoiding(self):
-        return self.__sensorFront.in_range or self.__sensorBack.in_range or self.__line_sensor.when_line == self.__avoid_line
+        return self.__sensorFront.in_range \
+               or self.__sensorBack.in_range \
+               or self.__line_sensor.when_line == self.__avoid_line
 
     def on_valid_face_present(self, present):
         if not self.__avoiding():
