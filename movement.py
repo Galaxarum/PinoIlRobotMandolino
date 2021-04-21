@@ -49,8 +49,13 @@ class Movement(FaceDetectorEventListener):
             self.__log.info('waiting to find line on back')
 
         def on_line_again():
-            self.__sensorFront.when_in_range = self.stop    # if obstacle prevents from leaving the line, wait
-            self.__sensorFront.when_out_of_range = on_line_again  # resume line routine from here when obstacle removed
+            def conflict_obstacle_front():
+                self.stop()
+                # resume line routine from here when obstacle removed
+                self.__sensorFront.when_out_of_range = on_line_again
+
+            # if obstacle prevents from leaving the line, wait
+            self.__sensorFront.when_in_range = conflict_obstacle_front
 
             self.__sensorBack.when_in_range = None  # ignore back obstacles when moving forward
 
@@ -58,10 +63,10 @@ class Movement(FaceDetectorEventListener):
             self.__line_sensor.when_no_line = on_leave_ending_line
 
             self.__robot.forward(speed=self.__avoidance_speed)
-            sleep(1)
             self.__log.info('waiting to leave line on back')
 
         def on_leave_ending_line():
+            self.move_idle(2)
             self.__reset_avoidances()
             self.__log.info('Line avoidance finished')
 
@@ -70,11 +75,15 @@ class Movement(FaceDetectorEventListener):
 
         self.__sensorFront.when_in_range = None     # ignore front obstacles while moving back
 
+        def conflict_obstacle_back():
+            self.stop()
+            # resume line routine from here when obstacle removed
+            self.__sensorBack.when_out_of_range = self.__avoid_line
+
         self.__line_sensor.when_line = None
         self.__line_sensor.when_no_line = on_leave_triggering_line
 
-        self.__sensorBack.when_in_range = self.stop    # if obstacle prevents from leaving the line, wait
-        self.__sensorBack.when_out_of_range = self.__avoid_line  # resume line routine from here when obstacle removed
+        self.__sensorBack.when_in_range = conflict_obstacle_back    # if obstacle prevents from leaving the line, wait
 
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
         self.__log.info('waiting to leave triggering line')
@@ -96,6 +105,7 @@ class Movement(FaceDetectorEventListener):
         def on_avoiding_ended():
             self.__sensorBack.when_out_of_range = None
             self.move_idle(2)
+
         self.__reset_avoidances()
         self.__log.info('Avoiding obstacle on back')
         self.__robot.forward(speed=self.__avoidance_speed, curve_left=0.5)
