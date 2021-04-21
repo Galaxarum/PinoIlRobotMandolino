@@ -41,9 +41,10 @@ class Movement(FaceDetectorEventListener):
         self.__line_sensor.when_no_line = None
 
     def __avoid_line(self):
-        return #todo: re-enable me
+        return   # todo: re-enable me
         print('Starting line avoidance routine')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=1)
+        self.__sensorFront.when_in_range = None
 
         def on_leave_triggering_line():
             sleep(1)
@@ -51,8 +52,10 @@ class Movement(FaceDetectorEventListener):
             self.__line_sensor.when_no_line = None
             print('waiting to find line on back')
 
-        def on_line_again():
-            self.move_idle()
+        def on_line_again():    # todo: critical case of obstacle in front when leaving second line
+            self.__robot.forward(speed=self.__avoidance_speed)
+            self.__sensorFront.when_in_range = self.__obstacle_front
+            self.__sensorBack.when_in_range = None
             sleep(1)
             self.__line_sensor.when_line = None
             self.__line_sensor.when_no_line = on_leave_ending_line
@@ -61,8 +64,10 @@ class Movement(FaceDetectorEventListener):
         def on_leave_ending_line():
             self.__line_sensor.when_line = self.__avoid_line
             self.__line_sensor.when_no_line = None
+            self.__sensorBack.when_in_range = self.__obstacle_back
             print('Line avoidance finished')
 
+        # todo: critical case of obstacle on back when leaving first line
         self.__line_sensor.when_line = None
         self.__line_sensor.when_no_line = on_leave_triggering_line
         print('waiting to leave triggering line')
@@ -74,6 +79,7 @@ class Movement(FaceDetectorEventListener):
         self.__stop_avoiding()
         self.__log.info('Avoiding obstacle on front')
         self.__robot.backward(speed=self.__avoidance_speed, curve_left=0.5)
+        # todo: what if i find a line when going back?
         self.__sensorFront.when_out_of_range = on_avoiding_ended
 
     def __obstacle_back(self):
