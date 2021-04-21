@@ -111,3 +111,4 @@ class Game:
     def receive_answer(self, answer):
         if self.__answer is None:
             self.__answer = answer
+            self.__feet_receiver.end_routine()
