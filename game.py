@@ -77,6 +77,11 @@ class Game:
                     self.__show_emotion(True)
                     self.__say('Oh no! you lost')
 
+            self.__answer = None
+
+        self.__say('I thank you to have participated to this game')
+        self.__say('Come to the Musical Instruments Museum to learn more')
+
     def __say(self, text):
         self.__speech_object.say(text, blocking=True)
         print(text)
