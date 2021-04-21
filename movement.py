@@ -118,5 +118,6 @@ class Movement(FaceDetectorEventListener):
         self.__robot.right(speed=self.__standard_speed)
 
     def stop(self):
+        self.__stop_avoiding()
         self.__robot.stop()
 
