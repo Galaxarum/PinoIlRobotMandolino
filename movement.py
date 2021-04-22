@@ -21,7 +21,7 @@ class Movement(FaceDetectorEventListener):
         self.__line_sensor = LineSensor(4, queue_len=10)
         self.__line_sensor.when_line = self.__avoid_line
 
-        self.__robot = Robot(left=(13, 26), right=(5, 6))
+        self.__robot = Robot(left=(26, 13), right=(6, 5))
         #self.__robot = Robot(left=(5, 6), right=(13, 26))
 
         self.__standard_speed = standard_speed
