@@ -6,6 +6,7 @@
 from __future__ import print_function
 import cv2 as cv
 from threading import Thread
+import math
 import logging
 
 
@@ -17,6 +18,9 @@ class FaceDetectorEventListener:
     CENTER = 'center'
     RIGHT = 'right'
     LEFT = 'left'
+    FAR = 'far'
+    MIDDLE = 'middle'
+    NEAR = 'near'
 
     def on_valid_face_present(self, present):
         """
@@ -79,6 +83,12 @@ class FaceDetector(Thread):
 
         self.__current_face_position = FaceDetectorEventListener.CENTER
         self.__is_face_present = False
+
+        self.__face_area_FAR = range(200, 300)
+        self.__face_area_MIDDLE = range(100, 200)
+        self.__face_area_NEAR = range(0, 100)
+        self.__current_face_distance = FaceDetectorEventListener.MIDDLE
+
         self.__log = logging.getLogger('face detection')
 
     def run(self):
@@ -134,6 +144,7 @@ class FaceDetector(Thread):
             biggest_face_height = biggest_face[3]
 
             center = (biggest_face_x + biggest_face_width // 2, biggest_face_y + biggest_face_height // 2)
+            area = (biggest_face_height // 2) * (biggest_face_width // 2) * math.pi # ellipse area
 
             frame = cv.ellipse(frame, center,
                                (biggest_face_width // 2, biggest_face_height // 2),
@@ -145,17 +156,26 @@ class FaceDetector(Thread):
                 self.__log.debug('face left')
                 if self.__current_face_position != FaceDetectorEventListener.LEFT:
                     self.__current_face_position = FaceDetectorEventListener.LEFT
-                    self.__on_face_position()
+
             elif center[0] in range(self.__frame_width_block + self.__center_side_frame_offset, (2 * self.__frame_width_block) - self.__center_side_frame_offset):
                 self.__log.debug('face center')
                 if self.__current_face_position != FaceDetectorEventListener.CENTER:
                     self.__current_face_position = FaceDetectorEventListener.CENTER
-                    self.__on_face_position()
             elif center[0] in range((2 * self.__frame_width_block) - self.__center_side_frame_offset, (3 * self.__frame_width_block)):
                 self.__log.debug('face right')
                 if self.__current_face_position != FaceDetectorEventListener.RIGHT:
                     self.__current_face_position = FaceDetectorEventListener.RIGHT
-                    self.__on_face_position()
+
+            # Find, basing on the area, the distance of the face
+            if area in self.__face_area_FAR:
+                self.__current_face_distance = FaceDetectorEventListener.FAR
+            elif area in self.__face_area_MIDDLE:
+                self.__current_face_distance = FaceDetectorEventListener.MIDDLE
+            elif area in self.__face_area_NEAR:
+                self.__current_face_distance = FaceDetectorEventListener.NEAR
+
+            # Final call, once the parameters are set
+            self.__on_face_position()
         else:
             self.__is_face_present = False
             self.__on_valid_face_present()
