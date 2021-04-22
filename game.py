@@ -122,7 +122,7 @@ class Game(AnswerReceiver):
                 sleep(0.1)
                 print('time tick...')
             elif on_timeout is not None and on_timeout():
-                self.__get_answer(timeout, on_timeout)
+                self.__get_answer(timeout, answers, on_timeout=on_timeout)
             else:
                 return
 
