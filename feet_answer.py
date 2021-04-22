@@ -22,10 +22,10 @@ class FeetAnswer(AnswerProvider):
     def stop(self):
         self.__disabled = True
 
-    def provide_answer(self, left_ans, right_ans):
+    def provide_answer(self, first_answer, second_answer):
         self.__disabled = False
-        self.__left_ans = left_ans
-        self.__right_ans = right_ans
+        self.__left_ans = second_answer
+        self.__right_ans = first_answer
         print('Sensors disabled')
 
     def __left_answer(self):

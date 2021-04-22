@@ -7,7 +7,7 @@ class AnswerProvider:
     def __init__(self, answer_receiver: AnswerReceiver):
         self._answer_receiver = answer_receiver
 
-    def provide_answer(self, right_answer, wrong_answer):
+    def provide_answer(self, first_answer, second_answer):
         raise SystemError('not implemented')
 
     def stop(self):
