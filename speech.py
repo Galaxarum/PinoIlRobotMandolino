@@ -57,10 +57,10 @@ class SpeechRecognizer(AnswerProvider):
             answer = answer.lower()
             answer_reported = None
 
-            if 'first' in answer:
+            if 'first' in answer or 'yes' in answer:
                 answer_reported = first_answer
 
-            if 'second' in answer:
+            if 'second' in answer or 'no' in answer:
                 answer_reported = second_answer
 
             if answer_reported is not None:
