@@ -28,7 +28,7 @@ class FaceDetectorEventListener:
         """
         pass
 
-    def on_face_position(self, position):
+    def on_face_position(self, position, distance):
         """
         Called when a face <change> position in the camera window.
         <change> := if a face stay in a specified part of the screen the method is NOT called. It's called
@@ -36,6 +36,7 @@ class FaceDetectorEventListener:
 
         Arguments:
              position: Position of the face in the camera window
+             distance: xyz
         """
         pass
 
@@ -51,7 +52,7 @@ class Listener(FaceDetectorEventListener):
         """
         print('Valid face present:', present)
 
-    def on_face_position(self, position):
+    def on_face_position(self, position, distance):
         """
         Override
         """
@@ -106,7 +107,7 @@ class FaceDetector(Thread):
                 self.__current_face_position = FaceDetectorEventListener.RIGHT
 
         for event_listener in self.__event_listeners:
-            event_listener.on_face_position(self.__current_face_position)
+            event_listener.on_face_position(self.__current_face_position, self.__current_face_distance)
 
     def __detect_face(self, frame):
         """

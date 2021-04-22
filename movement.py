@@ -126,9 +126,10 @@ class Movement(FaceDetectorEventListener):
                 #self.move_idle()
                 pass
 
-    def on_face_position(self, position):
+    def on_face_position(self, position, distance):
         self.__log.debug('on face position')
         if not self.__avoiding():
+            # todo: evaluate distance, change speed/stop
             if position == FaceDetectorEventListener.CENTER:
                 self.__robot.forward(self.__standard_speed)
                 self.__log.info('approaching person in front')
