@@ -113,7 +113,7 @@ class Game:
         :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
         """
         self.__feet_receiver.restart_routine(answers[0], answers[1])
-        self.__speech_recognizer.listen_and_recognize(self)
+        #self.__speech_recognizer.listen_and_recognize(self)
 
         start_time = time()
         while self.__answer is None:
