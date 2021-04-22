@@ -9,7 +9,7 @@ from answer_passing import AnswerReceiver, AnswerProvider
 
 class SpeechRecognizer(AnswerProvider):
 
-    def __init__(self, answer_receiver: AnswerReceiver, lang='it-IT'):
+    def __init__(self, answer_receiver: AnswerReceiver, lang='en-US'):
         super().__init__(answer_receiver)
         self.lang = lang
         self.__recognizer = sr.Recognizer()
@@ -69,7 +69,7 @@ class SpeechRecognizer(AnswerProvider):
 class TTS:
     __TTS_FILE = 'temp_tts_out.ogg'
 
-    def __init__(self, lang='it', mouth_controller=None):
+    def __init__(self, lang='en', mouth_controller=None):
         self.lang = lang
         self.__mouth_controller = mouth_controller
         self.__busy_observer = None
