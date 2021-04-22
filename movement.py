@@ -133,10 +133,10 @@ class Movement(FaceDetectorEventListener):
                 self.__robot.forward(self.__standard_speed)
                 self.__log.info('approaching person in front')
             elif position == FaceDetectorEventListener.LEFT:
-                self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
+                self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
                 self.__log.info('turning left')
             elif position == FaceDetectorEventListener.RIGHT:
-                self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
+                self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
                 self.__log.info('turning right')
             else:
                 raise ValueError(f'Unexpected face position: {position}')
