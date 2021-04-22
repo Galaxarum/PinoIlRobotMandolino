@@ -54,7 +54,10 @@ class SpeechRecognizer(AnswerProvider):
         def underlying_function():
             audio = self.get_audio()
             print('acquired audio')
-            answer = self.recognize(audio).lower()
+            answer = self.recognize(audio)
+            if answer is None:
+                return
+            answer = answer.lower()
             answer_reported = None
 
             for option in SpeechRecognizer.FIRST_OPTIONS:
