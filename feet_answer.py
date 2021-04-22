@@ -15,7 +15,7 @@ class FeetAnswer:
         atexit.register(lambda: self.__sensorRight.close())
         atexit.register(lambda: self.__sensorLeft.close())
 
-    def __end_routine(self):
+    def end_routine(self):
         self.__disabled = True
 
     def restart_routine(self):
@@ -27,10 +27,8 @@ class FeetAnswer:
         if not self.__disabled:
             print("True answer")
             self.__game.receive_answer(True)
-            self.__end_routine()
 
     def __right_answer(self):
         if not self.__disabled:
             print("False answer")
             self.__game.receive_answer(False)
-            self.__end_routine()
