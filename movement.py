@@ -10,12 +10,11 @@ from face_detection import FaceDetectorEventListener
 class Movement(FaceDetectorEventListener):
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
-        self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.1)
-        self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.1)
+        self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.2)
+        self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.2)
         self.__line_sensor = LineSensor(4, queue_len=10)
 
         self.__robot = Robot(left=(13, 26), right=(5, 6))
-        #self.__robot = Robot(left=(5, 6), right=(13, 26))
 
         self.__standard_speed = standard_speed
         self.__avoidance_speed = avoidance_speed
@@ -145,7 +144,8 @@ class Movement(FaceDetectorEventListener):
     def move_idle(self, wait=0):
         self.__log.info('rotating forever (idle)')
         sleep(wait)
-        self.__robot.right(speed=self.__standard_speed)
+        self.__robot.forward(speed=self.__standard_speed)
+        #self.__robot.right(speed=self.__standard_speed)
 
     def stop(self):
         self.__robot.stop()
