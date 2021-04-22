@@ -79,7 +79,7 @@ class FaceDetector(Thread):
 
         self.__frame_division = 3  # ! WARNING: This value is hardcoded since the code is developed on that value.
         self.__frame_width_block = cam_res_width // self.__frame_division
-        self.__center_side_frame_offset = 30
+        self.__center_side_frame_offset = 15
 
         self.__current_face_position = FaceDetectorEventListener.CENTER
         self.__is_face_present = False
