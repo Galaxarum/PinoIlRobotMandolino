@@ -57,11 +57,13 @@ class SpeechRecognizer(AnswerProvider):
                     answer = right_answer
                 elif left_answer in answer:
                     answer = left_answer
+                else:
+                    answer = None
 
             if answer is not None:
                 self._answer_receiver.receive_answer(answer)
 
-        Thread(target=underlying_function).start()
+        Thread(name='Answer recognizer', target=underlying_function).start()
 
 
 class TTS:
