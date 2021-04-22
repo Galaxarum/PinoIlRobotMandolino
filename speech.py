@@ -10,8 +10,8 @@ from answer_passing import AnswerReceiver, AnswerProvider
 class SpeechRecognizer(AnswerProvider):
 
     def __init__(self, answer_receiver: AnswerReceiver, lang='it-IT'):
+        super().__init__(answer_receiver)
         self.lang = lang
-        self.answer_receiver = answer_receiver
         self.__recognizer = sr.Recognizer()
         self.__GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""INSERT THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
         # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -64,7 +64,7 @@ class SpeechRecognizer(AnswerProvider):
                     answer = left_answer
 
             if answer is not None:
-                self.answer_receiver.receive_answer(answer)
+                self._answer_receiver.receive_answer(answer)
 
         Thread(target=underlying_function).start()
 

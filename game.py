@@ -113,7 +113,7 @@ class Game(AnswerReceiver):
         :param timeout: the maximum time to wait for an answer
         :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
         """
-        self.__feet_receiver.restart_routine(answers[0], answers[1])
+        self.__feet_receiver.provide_answer(answers[0], answers[1])
         self.__speech_recognizer.provide_answer(answers[0], answers[1])
 
         start_time = time()
@@ -129,4 +129,4 @@ class Game(AnswerReceiver):
     def receive_answer(self, answer):
         if self.__answer is None:
             self.__answer = answer
-            self.__feet_receiver.end_routine()
+            self.__feet_receiver.stop()
