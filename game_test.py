@@ -17,20 +17,17 @@ class GameTest:
     def __init__(self):
 
         random.shuffle(GameTest.game_elements)
-        self.__chosen = GameTest.game_elements[:3]
+        self.__chosen = GameTest.game_elements[:3].copy()
         self.__answer = None
         self.__index = 0
-        for c in self.__chosen:
-            rand = random.randint(1, 2)
-            if rand == 2:
-                temp = c[1]
-                c[1] = c[2]
-                c[2] = temp
 
     def retrieve_element(self):
-
         element = self.__chosen[self.__index]
         self.__index = self.__index + 1
+        if random.randint(1, 2) == 2:
+            t = element[1]
+            element[1] = element[2]
+            element[2] = t
         return element
 
     def check_answer(self, question, answer):
