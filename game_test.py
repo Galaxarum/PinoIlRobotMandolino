@@ -9,7 +9,10 @@ class GameTest:
                      ["The violin was invented in fifteenth century", "False", "True"],
                      ["Antonio Vivaldi was a priest", "True", "False"],
                      ["The Musical Instruments Museum hosts a reconstruction of the Study of Musical Phonology", "True", "False"],
-                     ["The first core of the Musical Instruments Museum was set up in the Fifties", "False", "True"]]
+                     ["The first core of the Musical Instruments Museum was set up in the Fifties", "False", "True"],
+                     ["What is the age of the oldest instrument here?", "more than one hundred years", "max one hundred years"],
+                     ["Which kind of instrument I remember to you", "Guitar", "Violin"],
+                     ["What do you expect to find in the museum?", "Only instruments", "Instruments and musical material like documents, sheets"]]
 
     def __init__(self):
 
