@@ -3,28 +3,25 @@ from threading import Thread
 
 import speech_recognition as sr
 from gtts import gTTS
-from playsound import playsound
+
+from answer_passing import AnswerReceiver, AnswerProvider
 
 
-class SpeechRecognizer:
+class SpeechRecognizer(AnswerProvider):
 
-    def __init__(self, lang='it-IT'):
+    def __init__(self, answer_receiver: AnswerReceiver, lang='en-US'):
+        super().__init__(answer_receiver)
         self.lang = lang
         self.__recognizer = sr.Recognizer()
-        self.__GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""INSERT THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
-        # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-        self.__IBM_USERNAME = "INSERT IBM SPEECH TO TEXT USERNAME HERE"
-        # IBM Speech to Text passwords are mixed-case alphanumeric strings
-        self.__IBM_PASSWORD = "INSERT IBM SPEECH TO TEXT PASSWORD HERE"
         with sr.Microphone() as mic:
             self.__recognizer.adjust_for_ambient_noise(mic, 5)
 
-    def get_audio(self):
+    def get_audio(self) -> sr.AudioData:
         with sr.Microphone() as mic:
             print("Listening for audio")
             return self.__recognizer.record(mic, duration=5)
 
-    def recognize(self, audio):
+    def recognize(self, audio: sr.AudioData) -> str:
         result = None
 
         # fallback to google speech recognition
@@ -50,20 +47,32 @@ class SpeechRecognizer:
 
         return result
 
-    def listen_and_recognize(self, game):
+    def provide_answer(self, first_answer, second_answer):
         def underlying_function():
             audio = self.get_audio()
             print('acquired audio')
             answer = self.recognize(audio)
-            game.receive_answer(answer)
+            if answer is None:
+                return
+            answer = answer.lower()
+            answer_reported = None
 
-        Thread(target=underlying_function).start()
+            if 'first' in answer or 'yes' in answer or 'left' in answer:
+                answer_reported = first_answer
+
+            if 'second' in answer or 'no' in answer or 'right' in answer:
+                answer_reported = second_answer
+
+            if answer_reported is not None:
+                self._answer_receiver.receive_answer(answer_reported)
+
+        Thread(name='Answer recognizer', target=underlying_function).start()
 
 
 class TTS:
     __TTS_FILE = 'temp_tts_out.ogg'
 
-    def __init__(self, lang='it', mouth_controller=None):
+    def __init__(self, lang='en', mouth_controller=None):
         self.lang = lang
         self.__mouth_controller = mouth_controller
         self.__busy_observer = None
