@@ -60,6 +60,7 @@ class Game(AnswerReceiver):
                 return False
 
         for i in range(Game.QUESTIONS_PER_GAME):
+            self.__emotion_controller.eye_neutral()
             element = game_handler.retrieve_element()
             self.__say_question(element)
             repeated_times = 0
