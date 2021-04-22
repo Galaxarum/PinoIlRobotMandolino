@@ -2,13 +2,14 @@ from random import Random
 from time import time
 from time import sleep
 
+from answer_passing import AnswerReceiver
 from feet_answer import FeetAnswer
 from led_matrices import LedMatrices
 from speech import SpeechRecognizer, TTS
 from game_test import GameTest
 
 
-class Game:
+class Game(AnswerReceiver):
 
     QUESTIONS_PER_GAME = 3
     MAX_QUESTION_REPETITIONS = 3
@@ -16,7 +17,7 @@ class Game:
     REPEAT_ANSWER_TIMEOUT = 20  # s
 
     def __init__(self):
-        self.__speech_recognizer = SpeechRecognizer()
+        self.__speech_recognizer = SpeechRecognizer(self)
         self.__emotion_controller = LedMatrices()
         self.__speech_object = TTS(mouth_controller=self.__emotion_controller)
         self.__feet_receiver = FeetAnswer(self)
@@ -113,7 +114,7 @@ class Game:
         :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
         """
         self.__feet_receiver.restart_routine(answers[0], answers[1])
-        self.__speech_recognizer.listen_and_recognize(self)
+        self.__speech_recognizer.provide_answer(answers[0], answers[1])
 
         start_time = time()
         while self.__answer is None:

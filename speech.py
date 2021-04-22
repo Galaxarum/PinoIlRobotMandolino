@@ -3,13 +3,15 @@ from threading import Thread
 
 import speech_recognition as sr
 from gtts import gTTS
-from playsound import playsound
+
+from answer_passing import AnswerReceiver, AnswerProvider
 
 
-class SpeechRecognizer:
+class SpeechRecognizer(AnswerProvider):
 
-    def __init__(self, lang='it-IT'):
+    def __init__(self, answer_receiver: AnswerReceiver, lang='it-IT'):
         self.lang = lang
+        self.answer_receiver = answer_receiver
         self.__recognizer = sr.Recognizer()
         self.__GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""INSERT THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
         # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -19,12 +21,12 @@ class SpeechRecognizer:
         with sr.Microphone() as mic:
             self.__recognizer.adjust_for_ambient_noise(mic, 5)
 
-    def get_audio(self):
+    def get_audio(self) -> sr.AudioData:
         with sr.Microphone() as mic:
             print("Listening for audio")
             return self.__recognizer.record(mic, duration=5)
 
-    def recognize(self, audio):
+    def recognize(self, audio: sr.AudioData) -> str:
         result = None
 
         # fallback to google speech recognition
@@ -50,12 +52,19 @@ class SpeechRecognizer:
 
         return result
 
-    def listen_and_recognize(self, game):
+    def provide_answer(self, left_answer, right_answer):
         def underlying_function():
             audio = self.get_audio()
             print('acquired audio')
             answer = self.recognize(audio)
-            game.receive_answer(answer)
+            if answer is not None:
+                if right_answer in answer:
+                    answer = right_answer
+                elif left_answer in answer:
+                    answer = left_answer
+
+            if answer is not None:
+                self.answer_receiver.receive_answer(answer)
 
         Thread(target=underlying_function).start()
 
