@@ -41,7 +41,8 @@ class Game(AnswerReceiver):
         self.__get_answer(Game.NO_GAME_TIMEOUT, [True, False])
 
         if self.__answer is None or not self.__answer:
-            self.__say('I\'m sorry you don\'t want to play with me :(')
+            self.__emotion_controller.eye_sad()
+            self.__say('I\'m sorry you don\'t want to play with me')
             return
         self.__answer = None
 
