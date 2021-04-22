@@ -4,10 +4,13 @@ import random
 class GameTest:
 
     game_elements = [["How many chords a bass guitar have?", "four", "five"],
-               ["Where is located the Musical Instruments Museum in Milan?", "Inside the Castello Sforzesco", "At the Triennale"],
-               ["The musical staff has five lines and four spaces", "True", "False"],
-               ["The violin was invented in fifteenth century", "False", "True"],
-               ["Antonio Vivaldi was a priest", "True", "False"]]
+                     ["Where is located the Musical Instruments Museum in Milan?", "Inside the Castello Sforzesco", "At the Triennale"],
+                     ["The musical staff has five lines and four spaces", "True", "False"],
+                     ["The violin was invented in fifteenth century", "False", "True"],
+                     ["Antonio Vivaldi was a priest", "True", "False"],
+                     ["The Musical Instruments Museum hosts a reconstruction of the Study of Musical Phonology", "True", "False"],
+                     ["The first core of the Musical Instruments Museum was set up in the Fifties", "False", "True"],
+                     []]
 
     def __init__(self):
 
@@ -30,11 +33,9 @@ class GameTest:
 
     def check_answer(self, question, answer):
 
-        questions_list = []
-        for q in GameTest.game_elements:
-            questions_list.append(q[0])
-        question_number = questions_list.index(question)
-        if answer == GameTest.game_elements[question_number][1]:
-            return True
-        else:
-            return False
+        for game_tuple in GameTest.game_elements:
+            q = game_tuple[0]
+            if q == question:
+                return game_tuple[1] == answer
+            else:
+                continue
