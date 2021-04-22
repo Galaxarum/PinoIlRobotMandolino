@@ -5,7 +5,7 @@ from time import sleep
 from feet_answer import FeetAnswer
 from led_matrices import LedMatrices
 from speech import SpeechRecognizer, TTS
-from tests.game_test import GameTest
+from game_test import GameTest
 
 
 class Game:
