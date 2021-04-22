@@ -114,9 +114,10 @@ class Movement(FaceDetectorEventListener):
         self.__sensorBack.when_out_of_range = on_avoiding_ended
 
     def __avoiding(self):
+
         return self.__sensorFront.when_out_of_range is not None \
                or self.__sensorBack.when_out_of_range is not None \
-               or self.__line_sensor.when_line == self.__avoid_line
+               or self.__line_sensor.when_line != self.__avoid_line
 
     def on_valid_face_present(self, present):
         if not self.__avoiding():
