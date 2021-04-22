@@ -1,5 +1,6 @@
 from face_detection import FaceDetector
 from movement import Movement
+from game import Game
 import logging
 import sys
 
@@ -46,6 +47,12 @@ if __name__ == '__main__':
     print_init_info()
 
     face_detector.start()
+
+    # Game initializing section
+    if 'game' in sys.argv:
+        game = Game()
+        game.start()
+
     face_detector.join()
 
 
