@@ -127,6 +127,7 @@ class Movement(FaceDetectorEventListener):
                 pass
 
     def on_face_position(self, position):
+        self.__log.debug('on face position')
         if not self.__avoiding():
             if position == FaceDetectorEventListener.CENTER:
                 self.__robot.forward(self.__standard_speed)

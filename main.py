@@ -41,15 +41,18 @@ if __name__ == '__main__':
 
     # Movement initializing section
     if 'movement' in sys.argv:
+        print('movement enabled')
         m = Movement(standard_speed=0.5, avoidance_speed=0.5)
         face_detector.add_event_listener(m)
 
     # Game initializing section
     if 'game' in sys.argv:
+        print('game enabled')
         game = Game()
         game.start()
 
     if 'face' in sys.argv:
+        print('face enabled')
         print_init_info()
         face_detector.start()
         face_detector.join()
