@@ -13,11 +13,6 @@ class SpeechRecognizer(AnswerProvider):
         super().__init__(answer_receiver)
         self.lang = lang
         self.__recognizer = sr.Recognizer()
-        self.__GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""INSERT THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
-        # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-        self.__IBM_USERNAME = "INSERT IBM SPEECH TO TEXT USERNAME HERE"
-        # IBM Speech to Text passwords are mixed-case alphanumeric strings
-        self.__IBM_PASSWORD = "INSERT IBM SPEECH TO TEXT PASSWORD HERE"
         with sr.Microphone() as mic:
             self.__recognizer.adjust_for_ambient_noise(mic, 5)
 
