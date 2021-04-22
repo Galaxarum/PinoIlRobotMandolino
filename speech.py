@@ -9,9 +9,6 @@ from answer_passing import AnswerReceiver, AnswerProvider
 
 class SpeechRecognizer(AnswerProvider):
 
-    FIRST_OPTIONS = ['first', 'one', 'a']
-    SECOND_OPTIONS = ['second', 'two', 'b']
-
     def __init__(self, answer_receiver: AnswerReceiver, lang='en-US'):
         super().__init__(answer_receiver)
         self.lang = lang
@@ -60,13 +57,11 @@ class SpeechRecognizer(AnswerProvider):
             answer = answer.lower()
             answer_reported = None
 
-            for option in SpeechRecognizer.FIRST_OPTIONS:
-                if option in answer:
-                    answer_reported = first_answer
+            if 'first' in answer:
+                answer_reported = first_answer
 
-            for option in SpeechRecognizer.SECOND_OPTIONS:
-                if option in answer:
-                    answer_reported = second_answer
+            if 'second' in answer:
+                answer_reported = second_answer
 
             if answer_reported is not None:
                 self._answer_receiver.receive_answer(answer_reported)
