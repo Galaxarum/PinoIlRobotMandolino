@@ -58,6 +58,7 @@ if __name__ == '__main__':
         print('game inside enabled')
         game_museum = GameMuseum()
         game_museum.start()
+        game_museum.join()
 
     if 'face' in sys.argv:
         print('face enabled')
