@@ -4,10 +4,10 @@ from threading import Thread
 
 class GameMuseum(Thread):
 
-    def __init__(self, tts_object: TTS):
+    def __init__(self):
         super().__init__()
 
-        self.__tts_object = tts_object
+        self.__tts_object = TTS()
 
         self.__available_sounds = {
             'violin' : 'violin.mp3',

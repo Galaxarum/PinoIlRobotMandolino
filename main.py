@@ -1,6 +1,7 @@
 from face_detection import FaceDetector
 from movement import Movement
 from game import Game
+from game_museum import GameMuseum
 import logging
 import sys
 import os
@@ -47,11 +48,16 @@ if __name__ == '__main__':
         face_detector.add_event_listener(m)
 
     # Game initializing section
-    if 'game' in sys.argv:
+    if 'outside' in sys.argv:
         os.system("amixer sset 'Headphone' 100%")
-        print('game enabled')
+        print('game outside enabled')
         game = Game()
         game.start()
+    elif 'inside' in sys.argv:
+        os.system("amixer sset 'Headphone' 93%")
+        print('game inside enabled')
+        game_museum = GameMuseum()
+        game_museum.start()
 
     if 'face' in sys.argv:
         print('face enabled')
