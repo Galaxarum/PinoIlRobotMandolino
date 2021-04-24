@@ -3,6 +3,7 @@ from movement import Movement
 from game import Game
 import logging
 import sys
+import os
 
 # --- CONST ---
 
@@ -47,6 +48,7 @@ if __name__ == '__main__':
 
     # Game initializing section
     if 'game' in sys.argv:
+        os.system("amixer sset 'Headphone' 100%")
         print('game enabled')
         game = Game()
         game.start()
