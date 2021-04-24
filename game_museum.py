@@ -16,7 +16,6 @@ class GameMuseum(Thread):
             'cetra' : 'cetra.mp3',
         }
         self.__continue_play = True
-        atexit.register(lambda: self.set_continue_play(False))
 
     def run(self) -> None:
         while self.__continue_play:
