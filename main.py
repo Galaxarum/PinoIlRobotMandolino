@@ -58,6 +58,11 @@ if __name__ == '__main__':
         print('game inside enabled')
         game_museum = GameMuseum()
         game_museum.start()
+        command = input()
+        while command != 'stop':
+            command = input()
+
+        game_museum.set_continue_play(False)
         game_museum.join()
 
     if 'face' in sys.argv:
