@@ -85,8 +85,8 @@ class FaceDetector(Thread):
         self.__is_face_present = False
 
         self.__face_area_FAR = range(0, 1200)
-        self.__face_area_MIDDLE = range(1200, 4000)
-        self.__face_area_NEAR = range(4000, 50000)
+        self.__face_area_MIDDLE = range(1200, 2300)
+        self.__face_area_NEAR = range(2300, 60000)
         self.__current_face_distance = FaceDetectorEventListener.MIDDLE
 
         self.__log = logging.getLogger('face detection')
