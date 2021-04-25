@@ -15,6 +15,9 @@ class Game(AnswerReceiver):
     MAX_QUESTION_REPETITIONS = 3
     NO_GAME_TIMEOUT = 10  # s
     REPEAT_ANSWER_TIMEOUT = 20  # s
+    INTER_ANSWER = ['Next question is', 'Another one now', 'Lets move on']
+    POS_FEEDBACK = ['Well done', 'Right', 'Good job']
+    NEG_FEEDBACK = ['Oh nooo']
 
     def __init__(self):
         self.__speech_recognizer = SpeechRecognizer(self)
@@ -23,11 +26,6 @@ class Game(AnswerReceiver):
         self.__feet_receiver = FeetAnswer(self)
         self.__answer = None
         self.__random = Random()
-
-        self.__sound = {
-            'one': 'sound1.mp3',
-            'two': 'sound2.mp3'
-        }
 
     def start(self):
 
@@ -47,8 +45,10 @@ class Game(AnswerReceiver):
         self.__answer = None
 
         self.__say('Ok! Lets start the game')
-        self.__say('Put you feet on the right sensor to choose the first answer')
+        self.__say('I\'m gonna ask you some questions, can you help me find the answer?')
+        self.__say('Put you feet on the right sensor to choose the first answer') #todo remember to highlight sensor position
         self.__say('Put you feet on the left sensor to choose the second answer')
+        self.__say('Otherwise, you can also say first or second to choose your answer')
 
         def question_timeout(question_tuple):
             nonlocal repeated_times
@@ -62,6 +62,14 @@ class Game(AnswerReceiver):
         for i in range(Game.QUESTIONS_PER_GAME):
             self.__emotion_controller.eye_neutral()
             element = game_handler.retrieve_element()
+            if i == 0:
+                self.__say('The first question is')
+            elif i == Game.QUESTIONS_PER_GAME - 1:
+                s = self.__random.sample(Game.INTER_ANSWER, 1)[0]
+                self.__say(s)
+            else:
+                self.__say('Almost there, last question!')
+
             self.__say_question(element)
             repeated_times = 0
 
@@ -78,14 +86,16 @@ class Game(AnswerReceiver):
 
                 if checked_answer:
                     self.__show_emotion(sad_emotion=False)
-                    self.__say('Right!')
+                    s = self.__random.sample(Game.POS_FEEDBACK, 1)[0]
+                    self.__say(s)
                 else:
                     self.__show_emotion(sad_emotion=True)
-                    self.__say('Oh no! you lost')
+                    s = self.__random.sample(Game.NEG_FEEDBACK, 1)[0]
+                    self.__say(s)
 
                 self.__answer = None
 
-        self.__say('I thank you to have participated to this game')
+        self.__say('thank you for playing this game')
         self.__say('Come to the Musical Instruments Museum to learn more')
 
     def __say_question(self, question_tuple):

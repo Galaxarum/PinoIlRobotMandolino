@@ -3,6 +3,7 @@ import atexit
 from speech import TTS
 from threading import Thread
 
+#todo fix me
 
 class GameMuseum(Thread):
 
