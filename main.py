@@ -72,6 +72,6 @@ if __name__ == '__main__':
     while command != 'stop':
         command = input()
     if game is not None:
-        game.running = False
+        game.close()
 
     print('Terminated')
