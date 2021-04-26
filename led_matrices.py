@@ -14,9 +14,9 @@ import atexit
 class EyeLedMatrix(max7219):
     def preprocess(self, image):
         image = super(EyeLedMatrix, self).preprocess(image)
+        image = image.transpose(Image.FLIP_TOP_BOTTOM)
         upper = image.crop((0, 0, image.width, image.height/2))
-        #upper = upper.transpose(Image.FLIP_TOP_BOTTOM)
-        upper = upper.transpose(Image.FLIP_LEFT_RIGHT)
+        upper = upper.transpose(Image.FLIP_TOP_BOTTOM)
         image.paste(upper)
         return image
 
@@ -43,7 +43,6 @@ class LedMatrices:
     def __init__(self):
         serial0 = spi(port=0, device=0, gpio=noop())
         self.eyes = EyeLedMatrix(serial0, width=16, height=16)
-
         serial1 = spi(port=1, device=0, gpio=noop())
         self.mouth_matrix = max7219(serial1)
         self.mouth = viewport(self.mouth_matrix, width=24, height=8)
