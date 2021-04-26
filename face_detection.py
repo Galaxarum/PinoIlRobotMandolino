@@ -8,6 +8,7 @@ import cv2 as cv
 from threading import Thread
 import math
 import logging
+from time import time
 
 
 # TEST CLASS
@@ -39,6 +40,9 @@ class FaceDetectorEventListener:
         """
         pass
 
+    def on_face_leaving(self):
+        pass
+
 
 class Listener(FaceDetectorEventListener):
 
@@ -56,6 +60,9 @@ class Listener(FaceDetectorEventListener):
         Override
         """
         print('Face position changed:', position)
+
+    def on_face_leaving(self):
+        print('Persona andata via')
 
 
 class FaceDetector(Thread):
@@ -76,6 +83,8 @@ class FaceDetector(Thread):
         self.__face_cascade_classifier = None
         self.__color = (255, 0, 0)
         self.__event_listeners = []
+
+        self.__face_timer = None
 
         self.__frame_division = 3  # ! WARNING: This value is hardcoded since the code is developed on that value.
         self.__frame_width_block = cam_res_width // self.__frame_division
@@ -108,6 +117,10 @@ class FaceDetector(Thread):
         for event_listener in self.__event_listeners:
             event_listener.on_face_position(self.__current_face_position)
 
+    def __on_face_leaving(self):
+        for event_listener in self.__event_listeners:
+            event_listener.on_face_leaving()
+
     def __detect_face(self, frame):
         """
         Identify faces in a frame using Haar method and relative samples.
@@ -126,6 +139,7 @@ class FaceDetector(Thread):
         faces = self.__face_cascade_classifier.detectMultiScale(frame_gray_scale_equalized)
 
         if len(faces) > 0:
+            self.__face_timer = time() # Previous->None; Now-> seconds
             biggest_face = faces[0]
 
             # Find the biggest face
@@ -179,6 +193,13 @@ class FaceDetector(Thread):
             self.__is_face_present = True
             self.__on_valid_face_present()
         else:
+            # Face not present
+
+            if self.__face_timer is not None:  # In this way event generation is stopped if a face is continuosly not detected
+                if time() - self.__face_timer > 5:
+                    self.__on_face_leaving()
+                    self.__face_timer = None
+
             self.__is_face_present = False
             self.__on_valid_face_present()
 
