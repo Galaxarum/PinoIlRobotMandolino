@@ -55,24 +55,21 @@ if __name__ == '__main__':
         print('game outside enabled')
         game = Game()
         game.start()
+
     elif 'inside' in sys.argv:
         os.system("amixer sset 'Headphone' 93%")
         print('game inside enabled')
-        game = GameMuseum()
-        game.start()
-
-    if game is not None:
-        command = input()
-        while command != 'stop':
-            command = input()
-
-        game.set_continue_play(False)
-        game.join()
+        game = GameMuseumDefinitive()
+        game.start_game()
 
     if 'face' in sys.argv:
         print('face enabled')
         print_init_info()
         face_detector.start()
         face_detector.join()
+
+    command = input()
+    while command != 'stop':
+        command = input()
 
     print('Terminated')
