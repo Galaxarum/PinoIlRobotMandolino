@@ -37,3 +37,7 @@ class FeetAnswer(AnswerProvider):
         if not self.__disabled:
             print("Right answer")
             self._answer_receiver.receive_answer(self.__right_ans)
+
+    def close(self):
+        self.__sensorLeft.close()
+        self.__sensorRight.close()
