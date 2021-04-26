@@ -1,7 +1,7 @@
 from face_detection import FaceDetector
 from movement import Movement
 from game import Game
-from game_museum import GameMuseum
+from game_inside import GameMuseumDefinitive
 import logging
 import sys
 import os
