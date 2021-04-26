@@ -26,79 +26,88 @@ class Game(AnswerReceiver):
         self.__feet_receiver = FeetAnswer(self)
         self.__answer = None
         self.__random = Random()
+        self.running = False
 
     def start(self):
+        self.running = True
 
-        game_handler = GameTest()
-        self.__say('hello! do you want to play a game?')
-
-        # sensor enable to receive an answer
-        # if no signal in a slot of time -> exit
-        # else set answer
-
-        self.__get_answer(Game.NO_GAME_TIMEOUT, [True, False])
-
-        if self.__answer is None or not self.__answer:
-            self.__emotion_controller.eye_sad()
-            self.__say('I\'m sorry you don\'t want to play with me')
-            return
-        self.__answer = None
-
-        self.__say('Ok! Lets start the game')
-        self.__say('I\'m gonna ask you some questions, can you help me find the answers?')
-
-        self.__say('Put your feet in front of the gear on your left to choose the first answer')
-        self.__say('Put your feet in front of the gear on your right to choose the second answer')
-
-        self.__say('Otherwise, you can say first or second to choose your answer')
-
-        def question_timeout(question_tuple):
-            nonlocal repeated_times
-            repeated_times += 1
-            if repeated_times < Game.MAX_QUESTION_REPETITIONS:
-                self.__say_question(question_tuple)
-                return True
-            else:
-                return False
-
-        for i in range(Game.QUESTIONS_PER_GAME):
-            self.__emotion_controller.eye_neutral()
-            element = game_handler.retrieve_element()
-            if i == 0:
-                self.__say('The first question is')
-            elif i == Game.QUESTIONS_PER_GAME - 1:
-                s = self.__random.sample(Game.INTER_ANSWER, 1)[0]
-                self.__say(s)
-            else:
-                self.__say('Almost there, last question!')
-
-            self.__say_question(element)
-            repeated_times = 0
+        try:
+            game_handler = GameTest()
+            self.__say('hello! do you want to play a game?')
 
             # sensor enable to receive an answer
             # if no signal in a slot of time -> exit
             # else set answer
 
-            self.__get_answer(Game.REPEAT_ANSWER_TIMEOUT, element[1:], on_timeout=lambda: question_timeout(element))
+            self.__get_answer(Game.NO_GAME_TIMEOUT, [True, False])
 
-            if self.__answer is None:   # Passed maximum repetitions
+            if self.__answer is None or not self.__answer:
+                self.__end_game_sad()
                 return
-            else:
-                checked_answer = game_handler.check_answer(element[0], self.__answer)
+            self.__answer = None
 
-                if checked_answer:
-                    self.__show_emotion(sad_emotion=False)
-                    s = self.__random.sample(Game.POS_FEEDBACK, 1)[0]
+            self.__say('Ok! Lets start the game')
+            self.__say('I\'m gonna ask you some questions, can you help me find the answers?')
+
+            self.__say('Put your feet in front of the gear on your left to choose the first answer')
+            self.__say('Put your feet in front of the gear on your right to choose the second answer')
+
+            self.__say('Otherwise, you can say first or second to choose your answer')
+
+            def question_timeout(question_tuple):
+                nonlocal repeated_times
+                repeated_times += 1
+                if repeated_times < Game.MAX_QUESTION_REPETITIONS:
+                    self.__say_question(question_tuple)
+                    return True
+                else:
+                    return False
+
+            for i in range(Game.QUESTIONS_PER_GAME):
+                self.__emotion_controller.eye_neutral()
+                element = game_handler.retrieve_element()
+                if i == 0:
+                    self.__say('The first question is')
+                elif i == Game.QUESTIONS_PER_GAME - 1:
+                    s = self.__random.sample(Game.INTER_ANSWER, 1)[0]
                     self.__say(s)
                 else:
-                    self.__show_emotion(sad_emotion=True)
-                    s = self.__random.sample(Game.NEG_FEEDBACK, 1)[0]
-                    self.__say(s)
+                    self.__say('Almost there, last question!')
 
-                self.__answer = None
+                self.__say_question(element)
+                repeated_times = 0
 
-        self.__say('thank you for playing this game')
-        self.__say('Come to the Musical Instruments Museum to learn more')
+                # sensor enable to receive an answer
+                # if no signal in a slot of time -> exit
+                # else set answer
+
+                self.__get_answer(Game.REPEAT_ANSWER_TIMEOUT, element[1:], on_timeout=lambda: question_timeout(element))
+
+                if self.__answer is None:   # Passed maximum repetitions
+                    return
+                else:
+                    checked_answer = game_handler.check_answer(element[0], self.__answer)
+
+                    if checked_answer:
+                        self.__show_emotion(sad_emotion=False)
+                        s = self.__random.sample(Game.POS_FEEDBACK, 1)[0]
+                        self.__say(s)
+                    else:
+                        self.__show_emotion(sad_emotion=True)
+                        s = self.__random.sample(Game.NEG_FEEDBACK, 1)[0]
+                        self.__say(s)
+
+                    self.__answer = None
+
+            self.__say('thank you for playing this game')
+            self.__say('Come to the Musical Instruments Museum to learn more')
+        except ValueError:
+            self.__end_game_sad()
+            return
+
+    def __end_game_sad(self):
+        self.__emotion_controller.eye_sad()
+        self.__say('I\'m sorry you don\'t want to play with me')
 
     def __say_question(self, question_tuple):
         self.__say(question_tuple[0])
@@ -106,8 +115,11 @@ class Game(AnswerReceiver):
         self.__say(question_tuple[2])
 
     def __say(self, text):
-        self.__speech_object.say(text, blocking=True)
-        print(text)
+        if self.running:
+            self.__speech_object.say(text, blocking=True)
+            print(text)
+        else:
+            raise ValueError('Game not running')
 
     def __show_emotion(self, sad_emotion):
         if self.__emotion_controller is not None:
@@ -124,7 +136,6 @@ class Game(AnswerReceiver):
 
     def __get_answer(self, timeout, answers, on_timeout=None):
         """
-
         :param timeout: the maximum time to wait for an answer
         :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
         """
