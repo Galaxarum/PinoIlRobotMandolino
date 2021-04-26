@@ -8,7 +8,7 @@ import cv2 as cv
 from threading import Thread
 import math
 import logging
-
+from time import time
 
 
 # TEST CLASS
@@ -22,13 +22,13 @@ class FaceDetectorEventListener:
     MIDDLE = 'middle'
     NEAR = 'near'
 
-    def on_valid_face_present(self, present):
+    def on_valid_face_present(self, present, distance):
         """
         Called when a face is being detected for a certain amount of time.
         """
         pass
 
-    def on_face_position(self, position, distance):
+    def on_face_position(self, position):
         """
         Called when a face <change> position in the camera window.
         <change> := if a face stay in a specified part of the screen the method is NOT called. It's called
@@ -40,23 +40,29 @@ class FaceDetectorEventListener:
         """
         pass
 
+    def on_face_leaving(self):
+        pass
+
 
 class Listener(FaceDetectorEventListener):
 
     def __init__(self):
         super().__init__()
 
-    def on_valid_face_present(self, present):
+    def on_valid_face_present(self, present, distance):
         """
         Override
         """
-        print('Valid face present:', present)
+        print('Valid face present:', present, 'and it\'s', distance)
 
-    def on_face_position(self, position, distance):
+    def on_face_position(self, position):
         """
         Override
         """
         print('Face position changed:', position)
+
+    def on_face_leaving(self):
+        print('Persona andata via')
 
 
 class FaceDetector(Thread):
@@ -78,6 +84,8 @@ class FaceDetector(Thread):
         self.__color = (255, 0, 0)
         self.__event_listeners = []
 
+        self.__face_timer = None
+
         self.__frame_division = 3  # ! WARNING: This value is hardcoded since the code is developed on that value.
         self.__frame_width_block = cam_res_width // self.__frame_division
         self.__center_side_frame_offset = 15
@@ -85,9 +93,9 @@ class FaceDetector(Thread):
         self.__current_face_position = FaceDetectorEventListener.CENTER
         self.__is_face_present = False
 
-        self.__face_area_FAR = range(200, 300)
-        self.__face_area_MIDDLE = range(100, 200)
-        self.__face_area_NEAR = range(0, 100)
+        self.__face_area_FAR = range(0, 1200)
+        self.__face_area_MIDDLE = range(1200, 2300)
+        self.__face_area_NEAR = range(2300, 60000)
         self.__current_face_distance = FaceDetectorEventListener.MIDDLE
 
         self.__log = logging.getLogger('face detection')
@@ -97,7 +105,7 @@ class FaceDetector(Thread):
 
     def __on_valid_face_present(self):
         for event_listener in self.__event_listeners:
-            event_listener.on_valid_face_present(self.__is_face_present)
+            event_listener.on_valid_face_present(self.__is_face_present, self.__current_face_distance)
 
     def __on_face_position(self):
         if self.__mirror_camera:
@@ -107,7 +115,11 @@ class FaceDetector(Thread):
                 self.__current_face_position = FaceDetectorEventListener.RIGHT
 
         for event_listener in self.__event_listeners:
-            event_listener.on_face_position(self.__current_face_position, self.__current_face_distance)
+            event_listener.on_face_position(self.__current_face_position)
+
+    def __on_face_leaving(self):
+        for event_listener in self.__event_listeners:
+            event_listener.on_face_leaving()
 
     def __detect_face(self, frame):
         """
@@ -127,10 +139,7 @@ class FaceDetector(Thread):
         faces = self.__face_cascade_classifier.detectMultiScale(frame_gray_scale_equalized)
 
         if len(faces) > 0:
-            # Signal that a face has been recognized
-            self.__is_face_present = True
-            self.__on_valid_face_present()
-
+            self.__face_timer = time() # Previous->None; Now-> seconds
             biggest_face = faces[0]
 
             # Find the biggest face
@@ -145,7 +154,8 @@ class FaceDetector(Thread):
             biggest_face_height = biggest_face[3]
 
             center = (biggest_face_x + biggest_face_width // 2, biggest_face_y + biggest_face_height // 2)
-            area = (biggest_face_height // 2) * (biggest_face_width // 2) * math.pi # ellipse area
+            area = (biggest_face_height // 2) * (biggest_face_width // 2) * math.pi  # ellipse area
+            area = math.floor(area)
 
             frame = cv.ellipse(frame, center,
                                (biggest_face_width // 2, biggest_face_height // 2),
@@ -157,15 +167,17 @@ class FaceDetector(Thread):
                 self.__log.debug('face left')
                 if self.__current_face_position != FaceDetectorEventListener.LEFT:
                     self.__current_face_position = FaceDetectorEventListener.LEFT
-
+                    self.__on_face_position()
             elif center[0] in range(self.__frame_width_block + self.__center_side_frame_offset, (2 * self.__frame_width_block) - self.__center_side_frame_offset):
                 self.__log.debug('face center')
                 if self.__current_face_position != FaceDetectorEventListener.CENTER:
                     self.__current_face_position = FaceDetectorEventListener.CENTER
+                    self.__on_face_position()
             elif center[0] in range((2 * self.__frame_width_block) - self.__center_side_frame_offset, (3 * self.__frame_width_block)):
                 self.__log.debug('face right')
                 if self.__current_face_position != FaceDetectorEventListener.RIGHT:
                     self.__current_face_position = FaceDetectorEventListener.RIGHT
+                    self.__on_face_position()
 
             # Find, basing on the area, the distance of the face
             if area in self.__face_area_FAR:
@@ -175,9 +187,19 @@ class FaceDetector(Thread):
             elif area in self.__face_area_NEAR:
                 self.__current_face_distance = FaceDetectorEventListener.NEAR
 
-            # Final call, once the parameters are set
-            self.__on_face_position()
+            print('Face area:', area)
+
+            # Signal that a face has been recognized, MUST be called after calculation of the face area
+            self.__is_face_present = True
+            self.__on_valid_face_present()
         else:
+            # Face not present
+
+            if self.__face_timer is not None:  # In this way event generation is stopped if a face is continuosly not detected
+                if time() - self.__face_timer > 5:
+                    self.__on_face_leaving()
+                    self.__face_timer = None
+
             self.__is_face_present = False
             self.__on_valid_face_present()
 
@@ -224,7 +246,7 @@ class FaceDetector(Thread):
 
             frame_with_detection = self.__detect_face(frame)
             #cv.imshow('Face detection', frame_with_detection)
-            # cv.imshow('Face detection', frame)
+            cv.imshow('Face detection', frame)
 
             if (cv.waitKey(self.__waiting_interval) == ord(self.__exit_char)):
                 break
@@ -233,4 +255,22 @@ class FaceDetector(Thread):
         self.__event_listeners.append(event_listener)
 
 
+if __name__ == '__main__':
+    FILE_PATH = {
+        'FACE_SAMPLES_FILE': 'haarcascade_frontalface_alt.xml'
+    }
+    EXIT_CHAR = 'e'
+    WAITING_INTERVAL = 40  # milliseconds
+    CAM_RES_WIDTH = 320
+    CAM_RES_HEIGHT = 240
+    DEFAULT_CAMERA_DEVICE = 0
+    MIRROR_CAMERA = False
 
+    listener = Listener()
+    face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
+                                 CAM_RES_HEIGHT, MIRROR_CAMERA)
+
+    face_detector.add_event_listener(listener)
+
+    face_detector.start()
+    face_detector.join()

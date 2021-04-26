@@ -1,8 +1,10 @@
 from face_detection import FaceDetector
 from movement import Movement
 from game import Game
+from game_museum import GameMuseum
 import logging
 import sys
+import os
 
 # --- CONST ---
 
@@ -33,6 +35,7 @@ def print_init_info():
     print('}')
 
 
+#todo use sensors to select game mode
 if __name__ == '__main__':
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
                                  CAM_RES_HEIGHT, MIRROR_CAMERA)
@@ -46,10 +49,22 @@ if __name__ == '__main__':
         face_detector.add_event_listener(m)
 
     # Game initializing section
-    if 'game' in sys.argv:
-        print('game enabled')
+    if 'outside' in sys.argv:
+        os.system("amixer sset 'Headphone' 100%")
+        print('game outside enabled')
         game = Game()
         game.start()
+    elif 'inside' in sys.argv:
+        os.system("amixer sset 'Headphone' 93%")
+        print('game inside enabled')
+        game_museum = GameMuseum()
+        game_museum.start()
+        command = input()
+        while command != 'stop':
+            command = input()
+
+        game_museum.set_continue_play(False)
+        game_museum.join()
 
     if 'face' in sys.argv:
         print('face enabled')
