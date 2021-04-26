@@ -44,13 +44,13 @@ class LedMatrices:
         serial0 = spi(port=0, device=0, gpio=noop())
         self.eyes = EyeLedMatrix(serial0, width=16, height=16)
         serial1 = spi(port=1, device=0, gpio=noop())
-        self.mouth_matrix = max7219(serial1)
+        self.mouth_matrix = max7219(serial1, cascaded=2)
         self.mouth = viewport(self.mouth_matrix, width=24, height=8)
         self.enabled = True
 
         def scroll_mouth():
             while self.enabled:
-                for offset in range(self.mouth.width // 2):
+                for offset in range(self.mouth.width // 3):
                     self.mouth.set_position((offset, 0))
 
                     sleep(0.05)
