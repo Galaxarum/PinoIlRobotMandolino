@@ -21,11 +21,9 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
     NEG_FEEDBACK = ['Oh nooo']
 
     def __init__(self):
-        self.__speech_recognizer = SpeechRecognizer(self)
+        super().__init__()
         self.__emotion_controller = LedMatrices()
         self.__speech_object = TTS(mouth_controller=self.__emotion_controller)
-        self.__feet_receiver = FeetAnswer(self)
-        self.__answer = None
         self.__random = Random()
         self.running = False
 
@@ -40,12 +38,12 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             # if no signal in a slot of time -> exit
             # else set answer
 
-            self.__get_answer(Game.NO_GAME_TIMEOUT, [True, False])
+            self.query_answer(Game.NO_GAME_TIMEOUT, [True, False])
 
-            if self.__answer is None or not self.__answer:
+            if self._answer is None or not self._answer:
                 self.__end_game_sad()
                 return
-            self.__answer = None
+            self._answer = None
 
             self.__say('Ok! Lets start the game')
             self.__say('I\'m gonna ask you some questions, can you help me find the answers?')
@@ -82,12 +80,12 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                 # if no signal in a slot of time -> exit
                 # else set answer
 
-                self.__get_answer(Game.REPEAT_ANSWER_TIMEOUT, element[1:], on_timeout=lambda: question_timeout(element))
+                self.query_answer(Game.REPEAT_ANSWER_TIMEOUT, element[1:], on_timeout=lambda: question_timeout(element))
 
-                if self.__answer is None:   # Passed maximum repetitions
+                if self._answer is None:   # Passed maximum repetitions
                     return
                 else:
-                    checked_answer = game_handler.check_answer(element[0], self.__answer)
+                    checked_answer = game_handler.check_answer(element[0], self._answer)
 
                     if checked_answer:
                         self.__show_emotion(sad_emotion=False)
@@ -98,7 +96,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                         s = self.__random.sample(Game.NEG_FEEDBACK, 1)[0]
                         self.__say(s)
 
-                    self.__answer = None
+                    self._answer = None
 
             self.__say('thank you for playing this game')
             self.__say('Come to the Musical Instruments Museum to learn more')
@@ -135,27 +133,9 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             else:
                 self.__emotion_controller.eye_neutral()
 
-    def __get_answer(self, timeout, answers, on_timeout=None):
-        """
-        :param timeout: the maximum time to wait for an answer
-        :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
-        """
-        self.__feet_receiver.provide_answer(answers[0], answers[1])
-        self.__speech_recognizer.provide_answer(answers[0], answers[1])
-
-        start_time = time()
-        while self.__answer is None:
-            if time() - start_time < timeout:
-                sleep(0.1)
-            elif on_timeout is not None and on_timeout():
-                self.__get_answer(timeout, answers, on_timeout=on_timeout)
-            else:
-                return
-
-    def receive_answer(self, answer):
-        if self.__answer is None:
-            self.__answer = answer
-            self.__feet_receiver.stop()
-
     def on_face_leaving(self):
+        self.running = False
+
+    def close(self):
+        super(Game, self).close()
         self.running = False
