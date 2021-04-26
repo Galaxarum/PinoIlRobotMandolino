@@ -123,7 +123,6 @@ class Movement(FaceDetectorEventListener):
         if distance == FaceDetectorEventListener.NEAR:
             self.__robot.stop()
 
-
     def on_face_position(self, position):
         self.__log.debug('on face position')
         if not self.__avoiding():
@@ -139,11 +138,15 @@ class Movement(FaceDetectorEventListener):
             else:
                 raise ValueError(f'Unexpected face position: {position}')
 
+    def on_face_leaving(self):
+        self.__reset_avoidances()
+        self.move_idle()
+
     def move_idle(self, wait=0):
         self.__log.info('rotating forever (idle)')
         sleep(wait)
-        self.__robot.forward(speed=self.__standard_speed)
-        #self.__robot.right(speed=self.__standard_speed)
+        self.__robot.forward(speed=self.__standard_speed, curve_right=0.5)
+        # self.__robot.right(speed=self.__standard_speed)
 
     def stop(self):
         self.__robot.stop()
