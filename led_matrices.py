@@ -99,6 +99,8 @@ class LedMatrices:
         sleep(1)
         self.eye_angry()
         sleep(1)
+        self.eye_x()
+        sleep(1)
         self.eyes.clear()
 
     def eye_neutral(self):
@@ -126,3 +128,8 @@ class LedMatrices:
             self.__eye_neutral_drawer(draw)
             draw.chord([(0, 0), (15, 15)], 180, -angle, fill='white')
             draw.chord([(0, 0), (15, 15)], 180 + angle, 360, fill='white')
+
+    def eye_x(self):
+        with canvas(self.eyes) as draw:
+            draw.line([(0, 0), (15, 15)], fill='white')
+            draw.line([(15, 0), (0, 15)], fill='white')
