@@ -1,7 +1,7 @@
 from face_detection import FaceDetector
 from movement import Movement
 from game import Game
-from game_museum import GameMuseum
+from game_inside import GameMuseumDefinitive
 import logging
 import sys
 import os
@@ -57,14 +57,8 @@ if __name__ == '__main__':
     elif 'inside' in sys.argv:
         os.system("amixer sset 'Headphone' 93%")
         print('game inside enabled')
-        game_museum = GameMuseum()
-        game_museum.start()
-        command = input()
-        while command != 'stop':
-            command = input()
-
-        game_museum.set_continue_play(False)
-        game_museum.join()
+        game_inside = GameMuseumDefinitive()
+        game_inside.start_game()
 
     if 'face' in sys.argv:
         print('face enabled')
