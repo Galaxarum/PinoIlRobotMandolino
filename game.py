@@ -47,10 +47,8 @@ class Game(AnswerReceiver):
         self.__say('Ok! Lets start the game')
         self.__say('I\'m gonna ask you some questions, can you help me find the answers?')
 
-        self.__say('Put your feet in front of the gear on your left to choose the first answer') #todo choose between plate and gear
-        # Put your feet in front of the plate on your left to choose the first answer
+        self.__say('Put your feet in front of the gear on your left to choose the first answer')
         self.__say('Put your feet in front of the gear on your right to choose the second answer')
-        # Put your feet in front of the plate on your right to choose the second answer
 
         self.__say('Otherwise, you can say first or second to choose your answer')
 
