@@ -48,6 +48,7 @@ if __name__ == '__main__':
         m = Movement(standard_speed=0.5, avoidance_speed=0.5)
         face_detector.add_event_listener(m)
 
+    game = None
     # Game initializing section
     if 'outside' in sys.argv:
         os.system("amixer sset 'Headphone' 100%")
@@ -57,14 +58,16 @@ if __name__ == '__main__':
     elif 'inside' in sys.argv:
         os.system("amixer sset 'Headphone' 93%")
         print('game inside enabled')
-        game_museum = GameMuseum()
-        game_museum.start()
+        game = GameMuseum()
+        game.start()
+
+    if game is not None:
         command = input()
         while command != 'stop':
             command = input()
 
-        game_museum.set_continue_play(False)
-        game_museum.join()
+        game.set_continue_play(False)
+        game.join()
 
     if 'face' in sys.argv:
         print('face enabled')

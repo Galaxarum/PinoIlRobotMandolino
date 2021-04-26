@@ -15,9 +15,10 @@ class EyeLedMatrix(max7219):
     def preprocess(self, image):
         image = super(EyeLedMatrix, self).preprocess(image)
         upper = image.crop((0, 0, image.width, image.height/2))
-        #upper = upper.transpose(Image.FLIP_TOP_BOTTOM)
+        upper = upper.transpose(Image.FLIP_TOP_BOTTOM)
         upper = upper.transpose(Image.FLIP_LEFT_RIGHT)
         image.paste(upper)
+        image = image.transpose()
         return image
 
 
