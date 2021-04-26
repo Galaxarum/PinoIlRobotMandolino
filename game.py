@@ -7,9 +7,10 @@ from feet_answer import FeetAnswer
 from led_matrices import LedMatrices
 from speech import SpeechRecognizer, TTS
 from game_test import GameTest
+from face_detection import FaceDetectorEventListener
 
 
-class Game(AnswerReceiver):
+class Game(AnswerReceiver, FaceDetectorEventListener):
 
     QUESTIONS_PER_GAME = 3
     MAX_QUESTION_REPETITIONS = 3
@@ -155,3 +156,6 @@ class Game(AnswerReceiver):
         if self.__answer is None:
             self.__answer = answer
             self.__feet_receiver.stop()
+
+    def on_face_leaving(self):
+        self.running = False
