@@ -122,8 +122,8 @@ class Movement(FaceDetectorEventListener):
 
         if distance == FaceDetectorEventListener.NEAR:
             print("ON FACE NEAR MOVEMENT")
-            self.__sensorFront.when_on_range = None
-            self.__sensorBack.when_on_range = None
+            self.__sensorFront.when_in_range = None
+            self.__sensorBack.when_in_range = None
             self.__line_sensor.when_line = None
             self.__robot.stop()
 
