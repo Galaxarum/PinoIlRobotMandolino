@@ -134,8 +134,8 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             else:
                 self.__emotion_controller.eye_neutral()
 
-    def on_face_position(self, position):
-        if position == FaceDetectorEventListener.NEAR:
+    def on_valid_face_present(self, present, distance):
+        if distance == FaceDetectorEventListener.NEAR:
             print('STARTING GAME FROM EVENT')
             self.start()
 
