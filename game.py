@@ -3,9 +3,8 @@ from time import time
 from time import sleep
 
 from answer_passing import AnswerReceiver
-from feet_answer import FeetAnswer
 from led_matrices import LedMatrices
-from speech import SpeechRecognizer, TTS
+from speech import TTS
 from game_test import GameTest
 from face_detection import FaceDetectorEventListener
 
