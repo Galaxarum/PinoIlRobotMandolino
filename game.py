@@ -10,7 +10,6 @@ from face_detection import FaceDetectorEventListener
 
 
 class Game(AnswerReceiver, FaceDetectorEventListener):
-
     QUESTIONS_PER_GAME = 3
     MAX_QUESTION_REPETITIONS = 3
     NO_GAME_TIMEOUT = 10  # s
@@ -85,7 +84,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
 
                 self.query_answer(element[1:], Game.REPEAT_ANSWER_TIMEOUT, on_timeout=lambda: question_timeout(element))
 
-                if self._answer is None:   # Passed maximum repetitions
+                if self._answer is None:  # Passed maximum repetitions
                     return
                 else:
                     checked_answer = game_handler.check_answer(element[0], self._answer)
@@ -138,7 +137,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                 self.__emotion_controller.eye_neutral()
 
     def on_valid_face_present(self, present, distance):
-        if self.running == False and distance == FaceDetectorEventListener.NEAR:
+        if not self.running and distance == FaceDetectorEventListener.NEAR:
             print('STARTING GAME FROM EVENT')
             self.start()
 
