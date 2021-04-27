@@ -149,7 +149,7 @@ class Movement(FaceDetectorEventListener):
         self.__log.info('rotating forever (idle)')
         sleep(wait)
         # self.__robot.forward(speed=self.__standard_speed, curve_right=0.5)
-        self.__robot.right(speed=self.__standard_speed)
+        self.__robot.right(speed=self.__standard_speed/2)
 
     def stop(self):
         self.__robot.stop()
