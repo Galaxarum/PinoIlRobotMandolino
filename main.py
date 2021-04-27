@@ -54,6 +54,7 @@ if __name__ == '__main__':
         os.system("amixer sset 'Headphone' 100%")
         print('game outside enabled')
         game = Game()
+        face_detector.add_event_listener(game)
         game.start()
 
     elif 'inside' in sys.argv:
