@@ -47,7 +47,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             self._answer = None
 
             self.__say('Let\'s start the game.mp3')
-            self.__say('I\'m gonna ask you some quesitons.mp3')
+            self.__say('I\'m gonna ask some quesitons.mp3')
             self.__say('I\'m gonna ask you some questions.mp3')
             # self.__say('can you help me find the answers?')
 
