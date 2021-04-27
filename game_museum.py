@@ -14,8 +14,8 @@ class GameMuseum(Thread):
         self.__tts_object = TTS()
 
         self.__available_sounds = {
-            'violin' : 'violin.mp3',
-            'cetra' : 'cetra.mp3',
+            'violin' : 'violin_1.mp3',
+            'guitar' : 'guitar_1.mp3',
         }
         self.__continue_play = True
 
