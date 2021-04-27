@@ -43,11 +43,11 @@ if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     game_selector = AnswerReceiver()
-    while game_selector.answer is None:
+    while game_selector.get_answer() is None:
         # todo: use a tts to ask for game mode
         game_selector.query_answer(('outside', 'inside'), timeout=5)    # todo: ask again for game mode
 
-    game_mode = game_selector.answer
+    game_mode = game_selector.get_answer()
     game_selector.close()
 
     if game_mode == 'outside':
