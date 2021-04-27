@@ -108,8 +108,9 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             return
 
     def __end_game_sad(self):
-        self.__emotion_controller.eye_sad()
-        self.__say('I\'m sorry you don\'t want to play.mp3')
+        text = 'I\'m sorry you don\'t want to play.mp3'
+        self.__speech_object.say(text, blocking=True)
+        print(text)
 
     def __say_question(self, question_tuple):
         self.__say(question_tuple[0])
