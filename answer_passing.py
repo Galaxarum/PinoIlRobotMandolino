@@ -36,6 +36,9 @@ class AnswerReceiver:
     def close(self):
         self.__feet_answer.close()
 
+    def get_answer(self):
+        return self._answer
+
 
 class AnswerProvider:
     def __init__(self, answer_receiver: AnswerReceiver):
