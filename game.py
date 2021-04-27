@@ -39,6 +39,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             # else set answer
 
             self.query_answer([True, False], Game.NO_GAME_TIMEOUT)
+            print(self._answer)
 
             if self._answer is None or not self._answer:
                 self.__end_game_sad()
