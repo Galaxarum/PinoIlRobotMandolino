@@ -86,5 +86,5 @@ class GameMuseumDefinitive:
             # Play music file (BLOCKING os call)
             os.system('mpg123 ' + 'sounds/internal_game/' + music_file)
             # Say something randomly
-            self.__say(self.__random_phrases[random.randint(0, len(self.__random_phrases))])
+            self.__say(random.sample(self.__random_phrases, 1)[0])
 
