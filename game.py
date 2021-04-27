@@ -82,7 +82,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                 # if no signal in a slot of time -> exit
                 # else set answer
 
-                self.query_answer(Game.REPEAT_ANSWER_TIMEOUT, element[1:], on_timeout=lambda: question_timeout(element))
+                self.query_answer(element[1:], Game.REPEAT_ANSWER_TIMEOUT, on_timeout=lambda: question_timeout(element))
 
                 if self._answer is None:   # Passed maximum repetitions
                     return
