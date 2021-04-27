@@ -31,7 +31,7 @@ class AnswerReceiver:
                 return
 
     def receive_answer(self, answer):
-        if self._answer is not None:
+        if self._answer is None:
             self._answer = answer
             self.__feet_answer.stop()
 
