@@ -48,7 +48,7 @@ class GameMuseumDefinitive:
 
     def start_game(self):
         # Tell user to chose the instrument that he wants to play and to confirm his choice
-        self.__say('Use right foot to change instrument and left foot to confirm')
+        self.__say('Use left foot to change instrument and right foot to confirm')
 
         # Main loop
         while True:
