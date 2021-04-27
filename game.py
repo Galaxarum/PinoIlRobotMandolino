@@ -38,7 +38,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             # if no signal in a slot of time -> exit
             # else set answer
 
-            self.query_answer(Game.NO_GAME_TIMEOUT, [True, False])
+            self.query_answer([True, False], Game.NO_GAME_TIMEOUT)
 
             if self._answer is None or not self._answer:
                 self.__end_game_sad()
