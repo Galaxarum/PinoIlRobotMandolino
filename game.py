@@ -16,9 +16,9 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
     MAX_QUESTION_REPETITIONS = 3
     NO_GAME_TIMEOUT = 10  # s
     REPEAT_ANSWER_TIMEOUT = 20  # s
-    INTER_ANSWER = ['Next question is', 'Another one now', 'Lets move on']
-    POS_FEEDBACK = ['Well done', 'Right', 'Good job']
-    NEG_FEEDBACK = ['Oh nooo']
+    INTER_ANSWER = ['Next question is.mp3', 'Another one now.mp3', 'Let\'s move on.mp3']
+    POS_FEEDBACK = ['Well done.mp3', 'Right.mp3', 'Good job.mp3']
+    NEG_FEEDBACK = ['Oh no.mp3']
 
     def __init__(self):
         super().__init__()
@@ -32,7 +32,8 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
 
         try:
             game_handler = GameTest()
-            self.__say('hello! do you want to play a game?')
+            self.__say('Hello.mp3')
+            self.__say('Do you want to play a game.mp3')
 
             # sensor enable to receive an answer
             # if no signal in a slot of time -> exit
@@ -45,13 +46,14 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                 return
             self._answer = None
 
-            self.__say('Ok! Lets start the game')
-            self.__say('I\'m gonna ask you some questions, can you help me find the answers?')
+            self.__say('Let\'s start the game.mp3')
+            self.__say('I\'m gonna ask you some questions.mp3')
+            self.__say('can you help me find the answers?')
 
-            self.__say('Put your feet in front of the gear on your left to choose the first answer')
-            self.__say('Put your feet in front of the gear on your right to choose the second answer')
+            self.__say('Feet gear left.mp3')
+            self.__say('Feet gear right.mp3')
 
-            self.__say('Otherwise, you can say first or second to choose your answer')
+            self.__say('You can say first or second.mp3')
 
             def question_timeout(question_tuple):
                 nonlocal repeated_times
@@ -66,12 +68,12 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                 self.__emotion_controller.eye_neutral()
                 element = game_handler.retrieve_element()
                 if i == 0:
-                    self.__say('The first question is')
+                    self.__say('The first question is.mp3')
                 elif i == Game.QUESTIONS_PER_GAME - 1:
                     s = self.__random.sample(Game.INTER_ANSWER, 1)[0]
                     self.__say(s)
                 else:
-                    self.__say('Almost there, last question!')
+                    self.__say('Last quesiton.mp3')
 
                 self.__say_question(element)
                 repeated_times = 0
@@ -98,15 +100,15 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
 
                     self._answer = None
 
-            self.__say('thank you for playing this game')
-            self.__say('Come to the Musical Instruments Museum to learn more')
+            self.__say('Thank you for playing.mp3')
+            self.__say('Come to the museum.mp3')
         except ValueError:
             self.__end_game_sad()
             return
 
     def __end_game_sad(self):
         self.__emotion_controller.eye_sad()
-        self.__say('I\'m sorry you don\'t want to play with me')
+        self.__say('I\'m sorry you don\'t want to play.mp3')
 
     def __say_question(self, question_tuple):
         self.__say(question_tuple[0])
