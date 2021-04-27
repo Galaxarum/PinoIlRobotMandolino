@@ -4,12 +4,12 @@ from threading import Thread
 import speech_recognition as sr
 from gtts import gTTS
 
-from answer_passing import AnswerReceiver, AnswerProvider
+import answer_passing
 
 
-class SpeechRecognizer(AnswerProvider):
+class SpeechRecognizer(answer_passing.AnswerProvider):
 
-    def __init__(self, answer_receiver: AnswerReceiver, lang='en-US'):
+    def __init__(self, answer_receiver: answer_passing.AnswerReceiver, lang='en-US'):
         super().__init__(answer_receiver)
         self.lang = lang
         self.__recognizer = sr.Recognizer()

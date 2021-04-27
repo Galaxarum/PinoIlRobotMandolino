@@ -1,12 +1,12 @@
 from gpiozero import DistanceSensor
 import atexit
 
-from answer_passing import AnswerProvider, AnswerReceiver
+import answer_passing
 
 
-class FeetAnswer(AnswerProvider):
+class FeetAnswer(answer_passing.AnswerProvider):
 
-    def __init__(self, answer_receiver: AnswerReceiver):
+    def __init__(self, answer_receiver: answer_passing.AnswerReceiver):
         super().__init__(answer_receiver)
         self.__sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.4)
         self.__sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.4)
