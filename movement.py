@@ -121,6 +121,9 @@ class Movement(FaceDetectorEventListener):
     def on_valid_face_present(self, present, distance):
 
         if distance == FaceDetectorEventListener.NEAR:
+            self.__sensorFront.when_on_range = None
+            self.__sensorBack.when_on_range = None
+            self.__line_sensor.when_line = None
             self.__robot.stop()
 
     def on_face_position(self, position):
