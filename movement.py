@@ -119,12 +119,12 @@ class Movement(FaceDetectorEventListener):
                or self.__line_sensor.when_line != self.__avoid_line
 
     def on_valid_face_present(self, present, distance):
-        if not self.__avoiding():
-            if present:
-                pass
-            else:
-                #self.move_idle()
-                pass
+
+        if distance == FaceDetectorEventListener.NEAR:
+            self.__sensorFront.when_in_range = None
+            self.__sensorBack.when_in_range = None
+            self.__line_sensor.when_line = None
+            self.__robot.stop()
 
     def on_face_position(self, position):
         self.__log.debug('on face position')
@@ -133,19 +133,23 @@ class Movement(FaceDetectorEventListener):
                 self.__robot.forward(self.__standard_speed)
                 self.__log.info('approaching person in front')
             elif position == FaceDetectorEventListener.LEFT:
-                self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
+                self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
                 self.__log.info('turning left')
             elif position == FaceDetectorEventListener.RIGHT:
-                self.__robot.left(self.__standard_speed)    # left e right sono invertiti per qualche motivo
+                self.__robot.right(self.__standard_speed)    # left e right sono invertiti per qualche motivo
                 self.__log.info('turning right')
             else:
                 raise ValueError(f'Unexpected face position: {position}')
 
+    def on_face_leaving(self):
+        self.__reset_avoidances()
+        self.move_idle()
+
     def move_idle(self, wait=0):
         self.__log.info('rotating forever (idle)')
         sleep(wait)
-        self.__robot.forward(speed=self.__standard_speed)
-        #self.__robot.right(speed=self.__standard_speed)
+        # self.__robot.forward(speed=self.__standard_speed, curve_right=0.5)
+        self.__robot.right(speed=self.__standard_speed)
 
     def stop(self):
         self.__robot.stop()

@@ -3,7 +3,8 @@ import atexit
 from speech import TTS
 from threading import Thread
 
-#todo fix me
+# todo fix me
+
 
 class GameMuseum(Thread):
 
@@ -13,8 +14,8 @@ class GameMuseum(Thread):
         self.__tts_object = TTS()
 
         self.__available_sounds = {
-            'violin' : 'violin.mp3',
-            'cetra' : 'cetra.mp3',
+            'violin' : 'violin_1.mp3',
+            'guitar' : 'guitar_1.mp3',
         }
         self.__continue_play = True
 
@@ -26,6 +27,8 @@ class GameMuseum(Thread):
         self.__continue_play = set_value
 
     def __play_sound(self) -> None:
+        # todo: execute in another shell -> xterm -e 'mpg123 file.mp3'
+
         # Play all sounds in the dictionary
         for key in self.__available_sounds.keys():
             self.__tts_object.say(self.__available_sounds[key], blocking=True)

@@ -2,6 +2,7 @@ from face_detection import FaceDetector
 from movement import Movement
 from game import Game
 from game_inside import GameMuseumDefinitive
+from answer_passing import AnswerReceiver
 import logging
 import sys
 import os
@@ -12,7 +13,7 @@ FILE_PATH = {
     'FACE_SAMPLES_FILE': 'haarcascade_frontalface_alt.xml'
 }
 EXIT_CHAR = 'e'
-WAITING_INTERVAL = 40 # milliseconds
+WAITING_INTERVAL = 40  # milliseconds
 CAM_RES_WIDTH = 320
 CAM_RES_HEIGHT = 240
 DEFAULT_CAMERA_DEVICE = 0
@@ -35,43 +36,39 @@ def print_init_info():
     print('}')
 
 
-#todo use sensors to select game mode
 if __name__ == '__main__':
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
                                  CAM_RES_HEIGHT, MIRROR_CAMERA)
 
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    # Movement initializing section
-    if 'movement' in sys.argv:
-        print('movement enabled')
-        m = Movement(standard_speed=0.5, avoidance_speed=0.5)
-        face_detector.add_event_listener(m)
+    game_selector = AnswerReceiver()
+    while game_selector.get_answer() is None:
+        # todo: use a tts to ask for game mode
+        game_selector.query_answer(('outside', 'inside'), timeout=5)    # todo: ask again for game mode
 
-    game = None
-    # Game initializing section
-    if 'outside' in sys.argv:
+    game_mode = game_selector.get_answer()
+    game_selector.close()
+
+    if game_mode == 'outside':
         os.system("amixer sset 'Headphone' 100%")
         print('game outside enabled')
         game = Game()
-        face_detector.add_event_listener(game)
+        game.start()
 
-    elif 'inside' in sys.argv:
+    elif game_mode == 'inside':
         os.system("amixer sset 'Headphone' 93%")
         print('game inside enabled')
         game = GameMuseumDefinitive()
         game.start_game()
 
-    if 'face' in sys.argv:
-        print('face enabled')
-        print_init_info()
-        face_detector.start()
-        face_detector.join()
+    print('movement enabled')
+    m = Movement(standard_speed=0.5, avoidance_speed=0.5)
+    face_detector.add_event_listener(m)
 
-    command = input()
-    while command != 'stop':
-        command = input()
-    if game is not None:
-        game.close()
+    print('face enabled')
+    print_init_info()
+    face_detector.start()
+    face_detector.join()
 
-    print('Terminated')
+    # terminated by shutting down

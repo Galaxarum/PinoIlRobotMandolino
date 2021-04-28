@@ -3,16 +3,16 @@ import random
 
 class GameTest:
 
-    game_elements = [["How many chords a bass guitar have?", "four", "five"],
-                     ["Where is located the Musical Instruments Museum in Milan?", "Inside the Castello Sforzesco", "At the Triennale"],
-                     ["The musical staff has five lines and four spaces", "True", "False"],
-                     ["The violin was invented in fifteenth century", "False", "True"],
-                     ["Antonio Vivaldi was a priest", "True", "False"],
-                     ["The Musical Instruments Museum hosts a reconstruction of the Study of Musical Phonology", "True", "False"],
-                     ["The first core of the Musical Instruments Museum was set up in the Fifties", "False", "True"],
-                     ["What is the age of the oldest instrument here?", "more than one hundred years", "less than one hundred years"],
-                     ["Which kind of instrument I remind you", "Guitar", "Violin"],
-                     ["What do you expect to find in the museum?", "Only instruments", "Instruments and musical documents"]]
+    game_elements = [["How many chords a bass.mp3", "Four.mp3", "Five.mp3"],
+                     ["Where is located the museum.mp3", "At the triennale.mp3", "At the triennale-2.mp3"],
+                     ["The musical staff.mp3", "True.mp3", "False.mp3"],
+                     ["The violin was invented.mp3", "False.mp3", "True.mp3"],
+                     ["Vivaldi Priest.mp3", "True.mp3", "False.mp3"],
+                     ["Musical Phonology.mp3", "True.mp3", "False.mp3"],
+                     ["First core 50s.mp3", "False.mp3", "True.mp3"],
+                     ["Age oldest instrument.mp3", "More 100 ys.mp3", "Less 100ys.mp3"],
+                     ["Which kind of instrument i remind.mp3", "Guitar.mp3", "Violin.mp3"],
+                     ["What do you expect to find.mp3", "Only instruments.mp3", "Instruments and documents.mp3"]]
 
     def __init__(self):
 
