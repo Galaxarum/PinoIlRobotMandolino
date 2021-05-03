@@ -1,6 +1,7 @@
 from gpiozero import DistanceSensor
 from speech import TTS
 from time import sleep
+from led_matrices import LedMatrices
 import os
 import random
 
@@ -19,7 +20,7 @@ class GameMuseumDefinitive:
         # Phrases that the robot can play
         self.__random_phrases = ['I suggest you to visit all the rooms!', 'Look at these beautiful instruments!']
 
-        self.__threshold_distance = 0.4
+        self.__threshold_distance = 0.05
         # Confirm instrument
         self.__sensorLeft = DistanceSensor(echo=17, trigger=23)
         # Change instrument
@@ -30,6 +31,7 @@ class GameMuseumDefinitive:
         #self.__sensorRight.when_in_range = self.__change_instrument
 
         self.__tts = TTS()
+        self.__emotion_controller = LedMatrices()
 
     # (Eventually triggered by an event, but not in our case)
     def __change_instrument(self):
@@ -47,6 +49,9 @@ class GameMuseumDefinitive:
         self.__tts.say(text, blocking=True)
 
     def start_game(self):
+        # Show a type of eye
+        self.__emotion_controller.eye_neutral()
+        
         # Tell user to chose the instrument that he wants to play and to confirm his choice
         self.__say('Use left foot to change instrument and right foot to confirm')
 
@@ -57,8 +62,8 @@ class GameMuseumDefinitive:
             left_distance = self.__sensorLeft.distance
             right_distance = self.__sensorRight.distance
             while left_distance > self.__threshold_distance and right_distance > self.__threshold_distance:
-                # Wait for 100 milliseconds
-                sleep(0.1)
+                # Wait for 50 milliseconds
+                sleep(0.05)
                 # Reassign new values
                 left_distance = self.__sensorLeft.distance
                 right_distance = self.__sensorRight.distance
@@ -81,10 +86,14 @@ class GameMuseumDefinitive:
 
         # Get a list of mp3 (value of the selected instrument key)
         music_file_list = list(self.__available_instruments.values())[self.__current_instrument_id]
-
+    
+        self.__emotion_controller.eye_sad()
+    
         for music_file in music_file_list:
             # Play music file (BLOCKING os call)
             os.system('mpg123 ' + 'sounds/internal_game/' + music_file)
             # Say something randomly
+            self.__emotion_controller.eye_neutral() # sad, bored, angry
             self.__say(random.sample(self.__random_phrases, 1)[0])
+            self.__emotion_controller.eye_sad()
 
