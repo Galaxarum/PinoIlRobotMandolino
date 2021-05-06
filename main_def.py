@@ -68,10 +68,12 @@ if __name__ == '__main__':
     # Selection of game
     if triggered_sensor == 'right':
         # Outside
-        startup_commands = ['movement', 'outside', 'face']
+        #startup_commands = ['movement', 'outside', 'face']
+        print('right: selected game outside')
     elif triggered_sensor == 'left':
         # Inside
-        startup_commands = ['inside']
+        #startup_commands = ['inside']
+        print('left: selected game inside')
 
     # Closing of side sensors
     sensorLeft.close()
