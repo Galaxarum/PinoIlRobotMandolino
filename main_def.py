@@ -1,7 +1,10 @@
+from gpiozero import DistanceSensor
 from face_detection import FaceDetector
 from movement import Movement
 from game import Game
 from game_inside import GameMuseumDefinitive
+from time import sleep
+from speech import TTS
 import logging
 import sys
 import os
@@ -18,6 +21,8 @@ CAM_RES_HEIGHT = 240
 DEFAULT_CAMERA_DEVICE = 0
 MIRROR_CAMERA = False
 
+# --- GLOBAL VAR ---
+triggered_sensor = None
 
 # --- FUNCTIONS ---
 
@@ -35,9 +40,45 @@ def print_init_info():
     print('}')
 
 
-#todo use sensors to select game mode
+def sensor_left_triggered():
+    global triggered_sensor
+    triggered_sensor = 'left'
+
+
+def sensor_right_triggered():
+    global triggered_sensor
+    triggered_sensor = 'right'
+
+
 if __name__ == '__main__':
+    sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.4)
+    sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.4)
     startup_commands = []
+    tts = TTS()
+
+    sensorRight.when_in_range = sensor_right_triggered
+    sensorLeft.when_in_range = sensor_left_triggered
+
+    tts.say('Put your feet under the left gear to start the internal game. Put your feet under the right sensor to start the external game')
+
+    # Wait for one of left/right sensor to be triggered
+    while triggered_sensor is None:
+        sleep(0.1)
+
+    # Selection of game
+    if triggered_sensor == 'right':
+        # Outside
+        startup_commands = ['movement', 'outside', 'face']
+    elif triggered_sensor == 'left':
+        # Inside
+        startup_commands = ['inside']
+
+    # Closing of side sensors
+    sensorLeft.close()
+    sensorRight.close()
+
+    # ------------------------------------------ like old main
+
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
                                  CAM_RES_HEIGHT, MIRROR_CAMERA)
 
@@ -63,12 +104,14 @@ if __name__ == '__main__':
         game = GameMuseumDefinitive()
         game.start_game()
 
+    # Face recognition activation
     if 'face' in startup_commands:
         print('face enabled')
         print_init_info()
         face_detector.start()
         face_detector.join()
 
+    # Keep shell opened
     command = input()
     while command != 'stop':
         command = input()
