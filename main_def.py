@@ -61,8 +61,8 @@ def sensor_right_triggered():
 if __name__ == '__main__':
     startup_commands = []
 
-    #sensorRight.when_in_range = sensor_right_triggered
-    #sensorLeft.when_in_range = sensor_left_triggered
+    sensorRight.when_in_range = sensor_right_triggered
+    sensorLeft.when_in_range = sensor_left_triggered
 
     tts = TTS()
 
