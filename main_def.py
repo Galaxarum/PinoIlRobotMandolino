@@ -51,8 +51,8 @@ def sensor_right_triggered():
 
 
 if __name__ == '__main__':
-    sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.4)
-    sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.4)
+    sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.03)
+    sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.03)
     startup_commands = []
     tts = TTS()
 
