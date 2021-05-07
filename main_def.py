@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     # Wait for one of left/right sensor to be triggered
     while triggered_sensor is None:
-        sleep(0.1)
+        sleep(0.05)
 
     # Selection of game
     if triggered_sensor == 'right':
