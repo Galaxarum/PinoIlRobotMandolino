@@ -18,7 +18,7 @@ class GameMuseumDefinitive:
         self.__current_instrument_id = 0
 
         # Phrases that the robot can play
-        self.__random_phrases = ['I suggest you to visit all the rooms!', 'Look at these beautiful instruments!']
+        self.__random_phrases = ['in_game__phrase_1.mp3', 'in_game__phrase_2.mp3']
 
         self.__threshold_distance = 0.03
         # Confirm instrument
@@ -35,7 +35,7 @@ class GameMuseumDefinitive:
         # What to do when a foot is near the sensor: change instrument
         #self.__sensorRight.when_in_range = self.__change_instrument
 
-        self.__tts = TTS()
+        #self.__tts = TTS()
         self.__emotion_controller = LedMatrices()
 
     def __test_trigger(self):
@@ -52,11 +52,12 @@ class GameMuseumDefinitive:
             self.__current_instrument_id = 0
 
         # Tell the user the new selected instrument
-        new_phrase = 'Now you have selected ' + list(self.__available_instruments.keys())[self.__current_instrument_id]
+        new_phrase = 'in_game__selected_' + list(self.__available_instruments.keys())[self.__current_instrument_id] + '.mp3'
         self.__say(new_phrase)
 
-    def __say(self, text):
-        self.__tts.say(text, blocking=True)
+    def __say(self, name):
+        #self.__tts.say(text, blocking=True)
+        os.system('mpg123 ' + 'sounds/internal_game/' + name)
         #print(text)
 
     def start_game(self):
@@ -64,7 +65,7 @@ class GameMuseumDefinitive:
         self.__emotion_controller.eye_neutral()
         
         # Tell user to chose the instrument that he wants to play and to confirm his choice
-        self.__say('Use left foot to change instrument and right foot to confirm')
+        self.__say('in_game__intro.mp3')
 
         # Main loop
         while True:
