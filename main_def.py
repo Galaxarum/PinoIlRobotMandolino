@@ -23,6 +23,8 @@ MIRROR_CAMERA = False
 
 # --- GLOBAL VAR ---
 triggered_sensor = None
+sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.06)
+sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.06)
 
 # --- FUNCTIONS ---
 
@@ -42,20 +44,21 @@ def print_init_info():
 
 def sensor_left_triggered():
     global triggered_sensor
+    global sensorRight
     triggered_sensor = 'left'
     print('Main: left triggered')
+    sensorRight.when_in_range = None
 
 
 def sensor_right_triggered():
     global triggered_sensor
+    global sensorLeft
     triggered_sensor = 'right'
     print('Main: right triggered')
+    sensorLeft.when_in_range = None
 
 
 if __name__ == '__main__':
-    global triggered_sensor
-    sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.06)
-    sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.06)
     startup_commands = []
 
     sensorRight.when_in_range = sensor_right_triggered
