@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     tts = TTS()
 
-    tts.say('Put your feet under the left gear to start the internal game. Put your feet under the right sensor to start the external game', blocking=True)
+    #tts.say('Put your feet under the left gear to start the internal game. Put your feet under the right sensor to start the external game', blocking=True)
 
     # Wait for one of left/right sensor to be triggered
     while triggered_sensor is None:
