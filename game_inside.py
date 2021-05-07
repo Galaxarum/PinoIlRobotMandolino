@@ -35,7 +35,7 @@ class GameMuseumDefinitive:
         # What to do when a foot is near the sensor: change instrument
         #self.__sensorRight.when_in_range = self.__change_instrument
 
-        #self.__tts = TTS()
+        self.__tts = TTS()
         self.__emotion_controller = LedMatrices()
 
     def __test_trigger(self):
@@ -56,8 +56,8 @@ class GameMuseumDefinitive:
         self.__say(new_phrase)
 
     def __say(self, name):
-        #self.__tts.say(text, blocking=True)
-        os.system('mpg123 ' + 'sounds/internal_game/' + name)
+        self.__tts.say(name, blocking=True)
+        #os.system('mpg123 ' + 'sounds/internal_game/' + name)
         #print(text)
 
     def start_game(self):
