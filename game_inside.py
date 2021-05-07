@@ -41,7 +41,7 @@ class GameMuseumDefinitive:
     def __test_trigger(self):
         self.__left_distance = self.__sensorLeft.distance
         self.__right_distance = self.__sensorRight.distance
-        #print('right triggered:', self.__sensorRight.distance)
+        print('triggered:', self.__sensorRight.distance, '---', self.__sensorLeft.distance)
 
     # (Eventually triggered by an event, but not in our case)
     def __change_instrument(self):
