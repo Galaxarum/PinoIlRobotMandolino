@@ -54,10 +54,11 @@ if __name__ == '__main__':
     sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.03)
     sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.03)
     startup_commands = []
-    tts = TTS()
 
     sensorRight.when_in_range = sensor_right_triggered
     sensorLeft.when_in_range = sensor_left_triggered
+
+    tts = TTS()
 
     tts.say('Put your feet under the left gear to start the internal game. Put your feet under the right sensor to start the external game')
 
