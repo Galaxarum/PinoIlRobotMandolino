@@ -22,10 +22,10 @@ class GameMuseumDefinitive:
 
         self.__threshold_distance = 0.03
         # Confirm instrument
-        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.03)
+        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.03, partial=True)
         self.__sensorLeft.when_in_range = self.__test_trigger
         # Change instrument
-        self.__sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.03)
+        self.__sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.03, partial=True)
         self.__sensorRight.when_in_range = self.__test_trigger
 
         self.__left_distance = 1
