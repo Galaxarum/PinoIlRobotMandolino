@@ -56,7 +56,7 @@ class GameMuseumDefinitive:
         self.__say(new_phrase)
 
     def __say(self, name):
-        self.__tts.say('internal_game/' + name, blocking=True)
+        self.__tts.say(name, blocking=True)
         #os.system('mpg123 ' + 'sounds/internal_game/' + name)
         #print(text)
 
