@@ -43,11 +43,13 @@ def print_init_info():
 def sensor_left_triggered():
     global triggered_sensor
     triggered_sensor = 'left'
+    print('Main: left triggered')
 
 
 def sensor_right_triggered():
     global triggered_sensor
     triggered_sensor = 'right'
+    print('Main: right triggered')
 
 
 if __name__ == '__main__':
