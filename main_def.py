@@ -53,8 +53,8 @@ def sensor_right_triggered():
 
 
 if __name__ == '__main__':
-    sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.03)
-    sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.03)
+    sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.06)
+    sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.06)
     startup_commands = []
 
     sensorRight.when_in_range = sensor_right_triggered
