@@ -67,7 +67,8 @@ if __name__ == '__main__':
     tts = TTS()
 
     #print('Say rule')
-    tts.say('Put your feet under the left gear to start the internal game. Put your feet under the right sensor to start the external game', blocking=True)
+    # [!] Audio commend are referred to the USER, while the code command are referred to the ROBOT
+    tts.say('Put your feet under the RIGHT gear to start the internal game. Put your feet under the LEFT sensor to start the external game', blocking=True)
 
     # Wait for one of left/right sensor to be triggered
     while triggered_sensor is None:
@@ -84,7 +85,7 @@ if __name__ == '__main__':
         print('right: selected game outside')
     elif triggered_sensor == 'left':
         # Inside
-        #startup_commands = ['inside']
+        startup_commands = ['inside']
         print('left: selected game inside')
 
     # Closing of side sensors
