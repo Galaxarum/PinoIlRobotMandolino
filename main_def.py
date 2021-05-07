@@ -70,6 +70,8 @@ if __name__ == '__main__':
         print('Right distance', sensorRight.distance)
         sleep(0.05)
 
+    print('triggered_sensor value:', triggered_sensor)
+
     # Selection of game
     if triggered_sensor == 'right':
         # Outside
