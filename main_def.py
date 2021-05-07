@@ -66,6 +66,8 @@ if __name__ == '__main__':
 
     # Wait for one of left/right sensor to be triggered
     while triggered_sensor is None:
+        print('Left distance', sensorLeft.distance)
+        print('Right distance', sensorRight.distance)
         sleep(0.05)
 
     # Selection of game
