@@ -11,7 +11,7 @@ class Movement(FaceDetectorEventListener):
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
         self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.2)
-        self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.2)
+        self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.8)
         self.__line_sensor = LineSensor(4, queue_len=10)
 
         self.__robot = Robot(left=(13, 26), right=(5, 6))
@@ -120,7 +120,7 @@ class Movement(FaceDetectorEventListener):
 
     def on_valid_face_present(self, present, distance):
 
-        if distance == FaceDetectorEventListener.NEAR:
+        if present and distance == FaceDetectorEventListener.NEAR:
             self.__sensorFront.when_in_range = None
             self.__sensorBack.when_in_range = None
             self.__line_sensor.when_line = None
