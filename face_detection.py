@@ -68,7 +68,7 @@ class Listener(FaceDetectorEventListener):
 class FaceDetector(Thread):
 
     def __init__(self, file_path, exit_char, waiting_interval, default_camera_device, cam_res_width, cam_res_height,
-                 mirror_camera=False):
+                 mirror_camera=False, debug=False):
         super().__init__()
 
         # (Private)
@@ -99,6 +99,8 @@ class FaceDetector(Thread):
         self.__current_face_distance = FaceDetectorEventListener.MIDDLE
 
         self.__log = logging.getLogger('face detection')
+        if debug:
+            self.add_event_listener(Listener())
 
     def run(self):
         self.start_detection()
