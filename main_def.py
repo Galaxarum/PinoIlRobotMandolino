@@ -19,7 +19,7 @@ WAITING_INTERVAL = 40 # milliseconds
 CAM_RES_WIDTH = 320
 CAM_RES_HEIGHT = 240
 DEFAULT_CAMERA_DEVICE = 0
-MIRROR_CAMERA = False
+MIRROR_CAMERA = True
 
 # --- GLOBAL VAR ---
 triggered_sensor = None
