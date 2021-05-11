@@ -119,6 +119,7 @@ class FeetAnswer(AnswerProvider):
 
     def __init__(self, answer_receiver: AnswerReceiver):
         super().__init__(answer_receiver)
+        sleep(1)
         self.__sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=0.02)
         self.__sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=0.02)
         self.__disabled = True
