@@ -98,6 +98,7 @@ if __name__ == '__main__':
                                  CAM_RES_HEIGHT, MIRROR_CAMERA)
 
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    sleep(1)
 
     # Movement initializing section
     if 'movement' in startup_commands:
