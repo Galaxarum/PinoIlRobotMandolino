@@ -53,7 +53,7 @@ class Listener(FaceDetectorEventListener):
         """
         Override
         """
-        print('Valid face present:', present, 'and it\'s', distance)
+        # print('Valid face present:', present, 'and it\'s', distance)
 
     def on_face_position(self, position):
         """
