@@ -27,6 +27,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
 
     def start(self):
         self.running = True
+        self._answer = None
 
         try:
             game_handler = GameTest()
