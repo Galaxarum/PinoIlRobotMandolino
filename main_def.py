@@ -23,8 +23,8 @@ MIRROR_CAMERA = False
 
 # --- GLOBAL VAR ---
 triggered_sensor = None
-sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.06, partial=True)
-sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.06, partial=True)
+sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.04, partial=True)
+sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.04, partial=True)
 
 # --- FUNCTIONS ---
 
@@ -95,9 +95,10 @@ if __name__ == '__main__':
     # ------------------------------------------ like old main
 
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
-                                 CAM_RES_HEIGHT, MIRROR_CAMERA)
+                                 CAM_RES_HEIGHT, MIRROR_CAMERA, True)
 
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    sleep(1)
 
     # Movement initializing section
     if 'movement' in startup_commands:
