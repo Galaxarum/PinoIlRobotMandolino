@@ -23,8 +23,8 @@ MIRROR_CAMERA = False
 
 # --- GLOBAL VAR ---
 triggered_sensor = None
-sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.06, partial=True)
-sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.06, partial=True)
+sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.04, partial=True)
+sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.04, partial=True)
 
 # --- FUNCTIONS ---
 
