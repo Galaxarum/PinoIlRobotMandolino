@@ -272,7 +272,7 @@ if __name__ == '__main__':
 
     listener = Listener()
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
-                                 CAM_RES_HEIGHT, MIRROR_CAMERA)
+                                 CAM_RES_HEIGHT, MIRROR_CAMERA, debug=False)
 
     face_detector.add_event_listener(listener)
 
