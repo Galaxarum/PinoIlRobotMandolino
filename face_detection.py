@@ -247,7 +247,7 @@ class FaceDetector(Thread):
                 break
 
             frame_with_detection = self.__detect_face(frame)
-            #cv.imshow('Face detection', frame_with_detection)
+            cv.imshow('Face detection', frame_with_detection)
             #cv.imshow('Face detection', frame)
 
             if (cv.waitKey(self.__waiting_interval) == ord(self.__exit_char)):
@@ -258,6 +258,7 @@ class FaceDetector(Thread):
 
 
 if __name__ == '__main__':
+    # decommentare imshow quando si fa il test
     FILE_PATH = {
         'FACE_SAMPLES_FILE': 'haarcascade_frontalface_alt.xml'
     }
