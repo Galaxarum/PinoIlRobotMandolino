@@ -163,6 +163,7 @@ class FaceDetector(Thread):
                                (biggest_face_width // 2, biggest_face_height // 2),
                                0, 0, 360, self.__color, 4)
 
+            print('x centro:', center[0])
             # Find, basing on the face center, the portion of the frame in which the face is contained.
             # If the position is different from the previous one, an event is thrown.
             if center[0] in range(0, self.__frame_width_block + self.__center_side_frame_offset):
@@ -267,7 +268,7 @@ if __name__ == '__main__':
     CAM_RES_WIDTH = 320
     CAM_RES_HEIGHT = 240
     DEFAULT_CAMERA_DEVICE = 0
-    MIRROR_CAMERA = False
+    MIRROR_CAMERA = True
 
     listener = Listener()
     face_detector = FaceDetector(FILE_PATH, EXIT_CHAR, WAITING_INTERVAL, DEFAULT_CAMERA_DEVICE, CAM_RES_WIDTH,
