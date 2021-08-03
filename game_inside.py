@@ -58,7 +58,9 @@ class GameMuseumDefinitive:
         self.__say(new_phrase)
 
     def __say(self, name):
+        self.__emotion_controller.speak()
         self.__tts.say(name, blocking=True)
+        self.__emotion_controller.stop_speak()
         #os.system('mpg123 ' + 'sounds/internal_game/' + name)
         #print(text)
 
@@ -105,13 +107,17 @@ class GameMuseumDefinitive:
         # Get a list of mp3 (value of the selected instrument key)
         music_file_list = list(self.__available_instruments.values())[self.__current_instrument_id]
     
-        self.__emotion_controller.eye_sad()
+        self.__emotion_controller.eye_flat()
     
         for music_file in music_file_list:
             # Play music file (BLOCKING os call)
+
+            self.__emotion_controller.speak()
             os.system('mpg123 ' + 'sounds/internal_game/' + music_file)
+            self.__emotion_controller.stop_speak()
+
             # Say something randomly
             self.__emotion_controller.eye_neutral() # sad, bored, angry
             self.__say(random.sample(self.__random_phrases, 1)[0])
-            self.__emotion_controller.eye_sad()
+            self.__emotion_controller.eye_flat()
 
