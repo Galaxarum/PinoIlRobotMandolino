@@ -22,9 +22,10 @@ DEFAULT_CAMERA_DEVICE = 0
 MIRROR_CAMERA = True
 
 # --- GLOBAL VAR ---
+DEFAULT_THRESHOLD_DISTANCE = 0.07 # 1.0 is one meter
 triggered_sensor = None
-sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.05, partial=True)
-sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.05, partial=True)
+sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=DEFAULT_THRESHOLD_DISTANCE, partial=True)
+sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=DEFAULT_THRESHOLD_DISTANCE, partial=True)
 
 # --- FUNCTIONS ---
 
