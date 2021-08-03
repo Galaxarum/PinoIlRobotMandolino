@@ -116,7 +116,7 @@ if __name__ == '__main__':
         face_detector.add_event_listener(game)
 
     elif 'inside' in startup_commands:
-        os.system("amixer sset 'Headphone' 93%")
+        os.system("amixer sset 'Headphone' 95%")
         print('game inside enabled')
         game = GameMuseumDefinitive()
         game.start_game()
