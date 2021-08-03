@@ -9,6 +9,8 @@ import random
 class GameMuseumDefinitive:
 
     def __init__(self):
+        self.__DEFAULT_THRESHOLD_DISTANCE = 0.12
+
         # Available instruments with relative sound files to be played
         # ! At least one instrument MUST be inserted
         self.__available_instruments = {
@@ -20,12 +22,12 @@ class GameMuseumDefinitive:
         # Phrases that the robot can play
         self.__random_phrases = ['in_game__phrase_1.mp3', 'in_game__phrase_2.mp3']
 
-        self.__threshold_distance = 0.05
+        self.__threshold_distance = self.__DEFAULT_THRESHOLD_DISTANCE
         # Confirm instrument
-        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=0.05, partial=True)
+        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=self.__DEFAULT_THRESHOLD_DISTANCE, partial=True)
         self.__sensorLeft.when_in_range = self.__test_trigger
         # Change instrument
-        self.__sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=0.05, partial=True)
+        self.__sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=self.__DEFAULT_THRESHOLD_DISTANCE, partial=True)
         self.__sensorRight.when_in_range = self.__test_trigger
 
         self.__left_distance = 1
