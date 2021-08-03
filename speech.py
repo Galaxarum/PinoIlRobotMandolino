@@ -13,6 +13,7 @@ class TTS:
         self.__busy_observer = None
 
     def __say_blocking(self, text):
+        print('__say_blocking function has been called...')
         tts = gTTS(text=text, lang=self.lang)
         tts.save(TTS.__TTS_FILE)
         self.__play_file_blocking(TTS.__TTS_FILE)
