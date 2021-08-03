@@ -1,4 +1,4 @@
-from ..led_matrices import LedMatrices
+from led_matrices import LedMatrices
 from time import sleep
 
 matrix = LedMatrices()
