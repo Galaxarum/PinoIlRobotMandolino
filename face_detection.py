@@ -229,8 +229,12 @@ class FaceDetector(Thread):
 
         camera_device = self.__default_camera_device
         capture = cv.VideoCapture(camera_device)
-        capture.set(cv.CAP_PROP_FRAME_WIDTH, self.__cam_res_width // 2)
+        capture.set(cv.CAP_PROP_FRAME_WIDTH, self.__cam_res_width)
         capture.set(cv.CAP_PROP_FRAME_HEIGHT, self.__cam_res_height)
+        #self.__cam_res_height = cv.CAP_PROP_FRAME_HEIGHT
+        
+        print('Camera width', capture.get(cv.CAP_PROP_FRAME_WIDTH))
+        print('Camera height', capture.get(cv.CAP_PROP_FRAME_HEIGHT))
 
         self.__log.debug('Check image capturing...')
 
@@ -259,14 +263,14 @@ class FaceDetector(Thread):
 
 
 if __name__ == '__main__':
-    # decommentare imshow quando si fa il test
+    # [!] decommentare imshow quando si fa il test e ricommentarlo per il deploy
     FILE_PATH = {
         'FACE_SAMPLES_FILE': 'haarcascade_frontalface_alt.xml'
     }
     EXIT_CHAR = 'e'
     WAITING_INTERVAL = 40  # milliseconds
-    CAM_RES_WIDTH = 320
-    CAM_RES_HEIGHT = 240
+    CAM_RES_WIDTH = 640#320
+    CAM_RES_HEIGHT = 320#240
     DEFAULT_CAMERA_DEVICE = 0
     MIRROR_CAMERA = True
 
