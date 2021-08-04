@@ -34,6 +34,8 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
             self.__say('Hello.mp3')
             self.__say('Do you want to play a game.mp3')
 
+            # Ask right or left
+
             # sensor enable to receive an answer
             # if no signal in a slot of time -> exit
             # else set answer
