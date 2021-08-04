@@ -120,8 +120,8 @@ class FeetAnswer(AnswerProvider):
     def __init__(self, answer_receiver: AnswerReceiver):
         super().__init__(answer_receiver)
         self.__DEFAULT_ANSWER_DISTANCE = 0.12
-        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, threshold_distance=self.__DEFAULT_ANSWER_DISTANCE, partial=True)
-        self.__sensorRight = DistanceSensor(echo=7, trigger=9, threshold_distance=self.__DEFAULT_ANSWER_DISTANCE, partial=True)
+        self.__sensorLeft = DistanceSensor(echo=17, trigger=23, queue_len=1, threshold_distance=self.__DEFAULT_ANSWER_DISTANCE, partial=True)
+        self.__sensorRight = DistanceSensor(echo=7, trigger=9, queue_len=1, threshold_distance=self.__DEFAULT_ANSWER_DISTANCE, partial=True)
         self.__disabled = True
         self.__left_ans = None
         self.__right_ans = None

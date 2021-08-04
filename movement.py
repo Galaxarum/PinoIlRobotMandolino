@@ -10,8 +10,8 @@ from face_detection import FaceDetectorEventListener
 class Movement(FaceDetectorEventListener):
 
     def __init__(self, standard_speed=0.25, avoidance_speed=0.25):
-        self.__sensorFront = DistanceSensor(echo=24, trigger=25, threshold_distance=0.05, partial=True)
-        self.__sensorBack = DistanceSensor(echo=27, trigger=22, threshold_distance=0.15, partial=True)
+        self.__sensorFront = DistanceSensor(echo=24, trigger=25, queue_len=1, threshold_distance=0.05, partial=True)
+        self.__sensorBack = DistanceSensor(echo=27, trigger=22, queue_len=1, threshold_distance=0.15, partial=True)
         self.__line_sensor = LineSensor(4, queue_len=10)
 
         self.__robot = Robot(left=(13, 26), right=(5, 6))
