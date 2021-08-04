@@ -104,7 +104,7 @@ if __name__ == '__main__':
     # Movement initializing section
     if 'movement' in startup_commands:
         print('movement enabled')
-        m = Movement(standard_speed=0.5, avoidance_speed=0.5)
+        m = Movement(standard_speed=0.3, avoidance_speed=0.3)
         face_detector.add_event_listener(m)
 
     game = None

@@ -10,7 +10,7 @@ class AnswerReceiver:
     def __init__(self):
         self._answer = None
         self.__feet_answer = FeetAnswer(self)
-        self.__speech = SpeechRecognizer(self)
+        # self.__speech = SpeechRecognizer(self)
 
     def query_answer(self, answers, timeout, on_timeout=None):
         """
@@ -19,7 +19,7 @@ class AnswerReceiver:
                 :param on_timeout: A function to execute on timeout. If it returns true, the timeout will be restarted, otherwise (false, no value returned, null function) it will stop waiting for an answer
                 """
         self.__feet_answer.provide_answer(answers[0], answers[1])
-        self.__speech.provide_answer(answers[0], answers[1])
+        # self.__speech.provide_answer(answers[0], answers[1])
 
         start_time = time()
         while self._answer is None:
