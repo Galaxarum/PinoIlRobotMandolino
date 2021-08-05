@@ -76,7 +76,7 @@ class Game(AnswerReceiver, FaceDetectorEventListener):
                     s = self.__random.sample(Game.INTER_ANSWER, 1)[0]
                     self.__say(s)
                 else:
-                    self.__say('Last quesiton.mp3')
+                    self.__say('Last question.mp3')
 
                 self.__say_question(element)
                 repeated_times = 0
