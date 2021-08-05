@@ -8,7 +8,7 @@ class GameTest:
                      ["The musical staff.mp3", "True.mp3", "False.mp3"],
                      ["The violin was invented.mp3", "False.mp3", "True.mp3"],
                      ["Vivaldi Priest.mp3", "True.mp3", "False.mp3"],
-                     ["Musical Phonology.mp3", "True.mp3", "False.mp3"],
+                     ["Musical phonology.mp3", "True.mp3", "False.mp3"],
                      ["First core 50s.mp3", "False.mp3", "True.mp3"],
                      ["Age oldest instrument.mp3", "More 100 ys.mp3", "Less 100ys.mp3"],
                      ["Which kind of instrument i remind.mp3", "Guitar.mp3", "Violin.mp3"],
