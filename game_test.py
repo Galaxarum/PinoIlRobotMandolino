@@ -10,7 +10,7 @@ class GameTest:
                      ["Vivaldi Priest.mp3", "True.mp3", "False.mp3"],
                      ["Musical phonology.mp3", "True.mp3", "False.mp3"],
                      ["First core 50s.mp3", "False.mp3", "True.mp3"],
-                     ["Age oldest instrument.mp3", "More 100 ys.mp3", "Less 100ys.mp3"],
+                     ["Age oldest instrument.mp3", "More 100 ys.mp3", "Less 100 ys.mp3"],
                      ["Which kind of instrument i remind.mp3", "Guitar.mp3", "Violin.mp3"],
                      ["What do you expect to find.mp3", "Only instruments.mp3", "Instruments and documents.mp3"]]
 
