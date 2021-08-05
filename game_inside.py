@@ -113,7 +113,7 @@ class GameMuseumDefinitive:
             # Play music file (BLOCKING os call)
 
             self.__emotion_controller.speak()
-            os.system('mpg123 ' + 'sounds/internal_game/' + music_file)
+            os.system('mpg123 ' + 'sounds_def/internal_game/' + music_file)
             self.__emotion_controller.stop_speak()
 
             # Say something randomly

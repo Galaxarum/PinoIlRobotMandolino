@@ -28,7 +28,7 @@ class TTS:
 
     def say(self, text, blocking=False):
         def player():
-            file_path = os.path.join('sounds', text)
+            file_path = os.path.join('sounds_def', text)
 
             if os.path.isfile(file_path):
                 self.__play_file_blocking(file_path)
